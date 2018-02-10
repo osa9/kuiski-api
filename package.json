@@ -1,0 +1,12 @@
+{
+  "name": "kuiski-api",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "node-fetch": "^1.7.3"
+  },
+  "devDependencies": {
+    "serverless": "^1.26.0",
+    "serverless-domain-manager": "^2.3.0"
+  }
+}

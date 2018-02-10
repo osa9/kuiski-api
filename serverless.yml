@@ -1,0 +1,99 @@
+service: kuiski-api
+
+provider:
+  name: aws
+  runtime: nodejs6.10
+  stage: v1
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:DescribeTable
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE}"
+  environment:
+    DYNAMODB_TABLE: kuiski
+    PUBNUB_PUBLISH_KEY: pub-c-ce0c67c2-ebed-4b63-a04d-bae8f872e669
+    PUBNUB_SUBSCRIBE_KEY: sub-c-8f1bb4c4-0cc2-11e8-afa0-d615f40beee2
+
+plugins:
+  - serverless-domain-manager
+
+custom:
+  customDomain:
+    domainName: api.kuis.ski
+    basePath: ''
+    stage: ${self:provider.stage}
+    createRoute53Record: true
+
+functions:
+  notify:
+    handler: src/notify.handler
+    events:
+      - http:
+          path: notify
+          method: get
+          cors: true
+  add-user:
+    handler: src/users.addUser
+    events:
+      - http:
+          path: event/{eventId}/users
+          method: post
+          cors: true
+          request:
+            parameters:
+              paths:
+                eventId: true
+  list-users:
+    handler: src/users.listUsers
+    events:
+      - http:
+          path: event/{eventId}/users
+          method: get
+          cors: true
+          request:
+            parameters:
+              paths:
+                eventId: true
+  update-user-debt:
+    handler: src/users.updateDebt
+    events:
+      - http:
+          path: event/{eventId}/users/{userId}/debt
+          method: put
+          cors: true
+          request:
+            parameters:
+              paths:
+                eventId: true
+                userId: true
+
+resources:
+  Resources:
+    kuiskiTable:
+      Type: AWS::DynamoDB::Table
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: group
+            AttributeType: S
+          -
+            AttributeName: key
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: group
+            KeyType: HASH
+          -
+            AttributeName: key
+            KeyType: RANGE
+        ProvisionedThroughput:
+          ReadCapacityUnits: 5
+          WriteCapacityUnits: 5
+        TableName: ${self:provider.environment.DYNAMODB_TABLE}
