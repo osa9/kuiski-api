@@ -19,6 +19,11 @@ provider:
     DYNAMODB_TABLE: kuiski
     PUBNUB_PUBLISH_KEY: pub-c-ce0c67c2-ebed-4b63-a04d-bae8f872e669
     PUBNUB_SUBSCRIBE_KEY: sub-c-8f1bb4c4-0cc2-11e8-afa0-d615f40beee2
+    KUISKITAN_ACCESS_TOKEN: ${ssm:kuiskitanAccessToken}
+    KUISKITAN_CHANNEL_SECRET: ${ssm:kuiskitanChannelSecret}
+    CLOUDINARY_CLOUD_NAME: ${ssm:cloudinaryCloudName}
+    CLOUDINARY_API_KEY: ${ssm:cloudinaryApiKey}
+    CLOUDINARY_API_SECRET: ${ssm:cloudinaryApiSecret}
 
 plugins:
   - serverless-domain-manager
@@ -72,7 +77,34 @@ functions:
               paths:
                 eventId: true
                 userId: true
-
+  kuistan-text:
+    handler: src/kuiskitan.text
+    events:
+      - http:
+          path: kuiskitan/text
+          method: post
+          cors: true
+  kuistan-dialog:
+    handler: src/kuiskitan.dialog
+    events:
+      - http:
+          path: kuiskitan/dialog
+          method: post
+          cors: true
+  kuistan-image:
+    handler: src/kuiskitan.image
+    events:
+      - http:
+          path: kuiskitan/image
+          method: post
+          cors: true
+  kuistan-webhook:
+    handler: src/kuiskitan.webhook
+    events:
+      - http:
+          path: kuiskitan/webhook
+          method: post
+          cors: true
 resources:
   Resources:
     kuiskiTable:

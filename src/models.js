@@ -1,98 +1,121 @@
 class BaseModel {
-    constructor(params) {
-        this.params = params;
-    }
+  constructor(params) {
+    this.params = params;
+  }
 
-    static fromObject(obj) {
-        const values = this.PARAMS.map((param) => {
-            if(!obj.hasOwnProperty(param)) {
-                throw TypeError(`Object must has propetery: ${param}`, 'models.js');
-            }
-    
-            return obj[param];
-        });
+  static fromObject(obj) {
+    const values = this.PARAMS.map(param => {
+      if (!obj.hasOwnProperty(param)) {
+        throw TypeError(`Object must has propetery: ${param}`, "models.js");
+      }
 
-        return new this.CLASS(...values);
-    }
+      return obj[param];
+    });
 
-    static fromString(str) {
-        return this.fromObject(JSON.parse(str));
-    }
+    return new this.CLASS(...values);
+  }
 
-    toJSON() {
-        const res = {};
-        this.params.forEach((param) => {
-            res[param] = this[param];
-        });
+  static fromString(str) {
+    return this.fromObject(JSON.parse(str));
+  }
 
-        return res;
-    }
+  toJSON() {
+    const res = {};
+    this.params.forEach(param => {
+      res[param] = this[param];
+    });
 
-    toString() {
-        return JSON.stringify(this.toJSON());
-    }
+    return res;
+  }
+
+  toString() {
+    return JSON.stringify(this.toJSON());
+  }
 }
 
-exports.User = class User extends BaseModel{
-    static get PARAMS() {
-        return ['id', 'name', 'icon', 'debt'];
-    }
+exports.User = class User extends BaseModel {
+  static get PARAMS() {
+    return ["id", "name", "icon", "debt"];
+  }
 
-    static get CLASS() {
-        return User;
-    }
+  static get CLASS() {
+    return User;
+  }
 
-    constructor(id, name, icon, debt) {
-        super(User.PARAMS);
+  constructor(id, name, icon, debt) {
+    super(User.PARAMS);
 
-        this.id = id;
-        this.name = name;
-        this.icon = icon;
-        this.debt = debt;
-    }
-}
+    this.id = id;
+    this.name = name;
+    this.icon = icon;
+    this.debt = debt;
+  }
+};
 
 exports.NotifyMessage = class NotifyMessage extends BaseModel {
-    static get PARAMS() {
-        return ['type', 'message'];
-    }
+  static get PARAMS() {
+    return ["type", "message"];
+  }
 
-    static get CLASS() {
-        return NotifyMessage;
-    }
+  static get CLASS() {
+    return NotifyMessage;
+  }
 
-    constructor(type, message) {
-        super(NotifyMessage.PARAMS);
+  constructor(type, message) {
+    super(NotifyMessage.PARAMS);
 
-        this.type = type;
-        this.message = message;
-    }
+    this.type = type;
+    this.message = message;
+  }
 
-    static fromObject(obj) {
-        return factory(NotifyMessage, PARAMS, obj);
-    }
+  static fromObject(obj) {
+    return factory(NotifyMessage, PARAMS, obj);
+  }
 
-    static Text(message) {
-        return new NotifyMessage('text', message);
-    }
+  static Text(message) {
+    return new NotifyMessage("text", message);
+  }
 
-    static Debt(userId, currentDebt, newDebt) {
-        return new NotifyMessage('debt', JSON.stringify({
-            userId: userId,
-            currentDebt: currentDebt,
-            newDebt: newDebt
-        }));
-    }
+  static Debt(userId, currentDebt, newDebt) {
+    return new NotifyMessage(
+      "debt",
+      JSON.stringify({
+        userId: userId,
+        currentDebt: currentDebt,
+        newDebt: newDebt
+      })
+    );
+  }
 
-    static Audio(url) {
-        return new NotifyMessage('audio', url);
-    }
+  static Audio(url) {
+    return new NotifyMessage("audio", url);
+  }
 
-    static Image(url) {
-        return new NotifyMessage('image', url);
-    }
+  static Image(url) {
+    return new NotifyMessage("image", url);
+  }
 
-    static Video(url) {
-        return new NotifyMessage('image', url);
-    }
-}
+  static Video(url) {
+    return new NotifyMessage("image", url);
+  }
+};
+
+exports.DialogOption = class DialogOption extends BaseModel {
+  static get PARAMS() {
+    return ["message", "callback", "options"];
+  }
+
+  static get CLASS() {
+    return DialogOption;
+  }
+
+  constructor(message, callback, options) {
+    super(DialogOption.PARAMS);
+
+    this.message = message;
+    this.callback = callback;
+    this.options = options;
+  }
+};
+
+exports.OptionItem = class extends BaseModel {};

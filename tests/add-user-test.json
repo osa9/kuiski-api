@@ -1,0 +1,12 @@
+{
+    "pathParameters": {
+        "eventId": "dev",
+        "userId": "osa9"
+    },
+    "queryStringParameters": {
+        "currentDebt": "5000",
+        "newDebt": "6000"
+    },
+    "body": ""
+}
+

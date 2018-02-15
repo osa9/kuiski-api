@@ -1,0 +1,4 @@
+{
+  "body":
+    "{ \"message\": \"ようじょ?\", \"callback\": \"http://example.com\", \"options\": [ { \"id\": \"yes\", \"label\": \"はい\" }, { \"id\": \"no\", \"label\": \"いいえ\" } ]}"
+}
