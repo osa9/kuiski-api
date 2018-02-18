@@ -1,0 +1,2649 @@
+{
+  "service": {
+    "service": "kuiski-api",
+    "serviceObject": {
+      "name": "kuiski-api"
+    },
+    "provider": {
+      "stage": "v1",
+      "region": "us-east-1",
+      "variableSyntax": "\\${([ ~:a-zA-Z0-9._'\",\\-\\/\\(\\)]+?)}",
+      "name": "aws",
+      "runtime": "nodejs6.10",
+      "iamRoleStatements": [
+        {
+          "Effect": "Allow",
+          "Action": [
+            "dynamodb:DescribeTable",
+            "dynamodb:Query",
+            "dynamodb:Scan",
+            "dynamodb:GetItem",
+            "dynamodb:PutItem",
+            "dynamodb:UpdateItem",
+            "dynamodb:DeleteItem"
+          ],
+          "Resource": "arn:aws:dynamodb:us-east-1:*:table/kuiski"
+        }
+      ],
+      "environment": {
+        "DYNAMODB_TABLE": "kuiski",
+        "PUBNUB_PUBLISH_KEY": "pub-c-ce0c67c2-ebed-4b63-a04d-bae8f872e669",
+        "PUBNUB_SUBSCRIBE_KEY": "sub-c-8f1bb4c4-0cc2-11e8-afa0-d615f40beee2",
+        "KUISKITAN_ACCESS_TOKEN": "VV47ruVNSSYbIThZFOYIEJrKRQtCbmdkaob6HXJmuSafi1asFM+H4uyLjF794jBPvTXOwIHx5teRenbGqDHwMYAuD7JGTguHPhCp/JOvxmCJN59Jfvg5sslfen+moNfhmObrHznq8HRhpFi2AmgfZwdB04t89/1O/w1cDnyilFU=",
+        "KUISKITAN_CHANNEL_SECRET": "0913b18d40a0d56766f8d96ff117b8e8",
+        "CLOUDINARY_CLOUD_NAME": "dke5tzfyy",
+        "CLOUDINARY_API_KEY": "382374726353465",
+        "CLOUDINARY_API_SECRET": "q-mDFpDJK42HSJpPrfPxWwEwp_M",
+        "GOOGLE_MAP_KEY": "AIzaSyBuRCLdclMyL_JdEHONdZxB8-I5u2d1vpA"
+      },
+      "versionFunctions": true,
+      "remoteFunctionData": null,
+      "compiledCloudFormationTemplate": {
+        "AWSTemplateFormatVersion": "2010-09-09",
+        "Description": "The AWS CloudFormation template for this Serverless application",
+        "Resources": {
+          "ServerlessDeploymentBucket": {
+            "Type": "AWS::S3::Bucket"
+          },
+          "NotifyLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/kuiski-api-v1-notify"
+            }
+          },
+          "AddDashuserLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/kuiski-api-v1-add-user"
+            }
+          },
+          "ListDashusersLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/kuiski-api-v1-list-users"
+            }
+          },
+          "UpdateDashuserDashdebtLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/kuiski-api-v1-update-user-debt"
+            }
+          },
+          "KuistanDashtextLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/kuiski-api-v1-kuistan-text"
+            }
+          },
+          "KuistanDashdialogLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/kuiski-api-v1-kuistan-dialog"
+            }
+          },
+          "KuistanDashimageLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/kuiski-api-v1-kuistan-image"
+            }
+          },
+          "KuistanDashwebhookLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/kuiski-api-v1-kuistan-webhook"
+            }
+          },
+          "AuthLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/kuiski-api-v1-auth"
+            }
+          },
+          "ListDashimageLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/kuiski-api-v1-list-image"
+            }
+          },
+          "IamRoleLambdaExecution": {
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+              "AssumeRolePolicyDocument": {
+                "Version": "2012-10-17",
+                "Statement": [
+                  {
+                    "Effect": "Allow",
+                    "Principal": {
+                      "Service": [
+                        "lambda.amazonaws.com"
+                      ]
+                    },
+                    "Action": [
+                      "sts:AssumeRole"
+                    ]
+                  }
+                ]
+              },
+              "Policies": [
+                {
+                  "PolicyName": {
+                    "Fn::Join": [
+                      "-",
+                      [
+                        "v1",
+                        "kuiski-api",
+                        "lambda"
+                      ]
+                    ]
+                  },
+                  "PolicyDocument": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                      {
+                        "Effect": "Allow",
+                        "Action": [
+                          "logs:CreateLogStream"
+                        ],
+                        "Resource": [
+                          {
+                            "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/kuiski-api-v1-notify:*"
+                          },
+                          {
+                            "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/kuiski-api-v1-add-user:*"
+                          },
+                          {
+                            "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/kuiski-api-v1-list-users:*"
+                          },
+                          {
+                            "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/kuiski-api-v1-update-user-debt:*"
+                          },
+                          {
+                            "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/kuiski-api-v1-kuistan-text:*"
+                          },
+                          {
+                            "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/kuiski-api-v1-kuistan-dialog:*"
+                          },
+                          {
+                            "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/kuiski-api-v1-kuistan-image:*"
+                          },
+                          {
+                            "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/kuiski-api-v1-kuistan-webhook:*"
+                          },
+                          {
+                            "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/kuiski-api-v1-auth:*"
+                          },
+                          {
+                            "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/kuiski-api-v1-list-image:*"
+                          }
+                        ]
+                      },
+                      {
+                        "Effect": "Allow",
+                        "Action": [
+                          "logs:PutLogEvents"
+                        ],
+                        "Resource": [
+                          {
+                            "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/kuiski-api-v1-notify:*:*"
+                          },
+                          {
+                            "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/kuiski-api-v1-add-user:*:*"
+                          },
+                          {
+                            "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/kuiski-api-v1-list-users:*:*"
+                          },
+                          {
+                            "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/kuiski-api-v1-update-user-debt:*:*"
+                          },
+                          {
+                            "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/kuiski-api-v1-kuistan-text:*:*"
+                          },
+                          {
+                            "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/kuiski-api-v1-kuistan-dialog:*:*"
+                          },
+                          {
+                            "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/kuiski-api-v1-kuistan-image:*:*"
+                          },
+                          {
+                            "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/kuiski-api-v1-kuistan-webhook:*:*"
+                          },
+                          {
+                            "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/kuiski-api-v1-auth:*:*"
+                          },
+                          {
+                            "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/kuiski-api-v1-list-image:*:*"
+                          }
+                        ]
+                      },
+                      {
+                        "$ref": "$[\"service\"][\"provider\"][\"iamRoleStatements\"][0]"
+                      }
+                    ]
+                  }
+                }
+              ],
+              "Path": "/",
+              "RoleName": {
+                "Fn::Join": [
+                  "-",
+                  [
+                    "kuiski-api",
+                    "v1",
+                    "us-east-1",
+                    "lambdaRole"
+                  ]
+                ]
+              }
+            }
+          },
+          "NotifyLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "S3Key": "serverless/kuiski-api/v1/1518913012821-2018-02-18T00:16:52.821Z/kuiski-api.zip"
+              },
+              "FunctionName": "kuiski-api-v1-notify",
+              "Handler": "src/notify.handler",
+              "MemorySize": 1024,
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              },
+              "Runtime": "nodejs6.10",
+              "Timeout": 6,
+              "Environment": {
+                "Variables": {
+                  "DYNAMODB_TABLE": "kuiski",
+                  "PUBNUB_PUBLISH_KEY": "pub-c-ce0c67c2-ebed-4b63-a04d-bae8f872e669",
+                  "PUBNUB_SUBSCRIBE_KEY": "sub-c-8f1bb4c4-0cc2-11e8-afa0-d615f40beee2",
+                  "KUISKITAN_ACCESS_TOKEN": "VV47ruVNSSYbIThZFOYIEJrKRQtCbmdkaob6HXJmuSafi1asFM+H4uyLjF794jBPvTXOwIHx5teRenbGqDHwMYAuD7JGTguHPhCp/JOvxmCJN59Jfvg5sslfen+moNfhmObrHznq8HRhpFi2AmgfZwdB04t89/1O/w1cDnyilFU=",
+                  "KUISKITAN_CHANNEL_SECRET": "0913b18d40a0d56766f8d96ff117b8e8",
+                  "CLOUDINARY_CLOUD_NAME": "dke5tzfyy",
+                  "CLOUDINARY_API_KEY": "382374726353465",
+                  "CLOUDINARY_API_SECRET": "q-mDFpDJK42HSJpPrfPxWwEwp_M",
+                  "GOOGLE_MAP_KEY": "AIzaSyBuRCLdclMyL_JdEHONdZxB8-I5u2d1vpA"
+                }
+              }
+            },
+            "DependsOn": [
+              "NotifyLogGroup",
+              "IamRoleLambdaExecution"
+            ]
+          },
+          "NotifyLambdaVersionJECfQailQOwXZvIErIXZ2uoojAcZP3XL2aGWa1xqQ": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "NotifyLambdaFunction"
+              },
+              "CodeSha256": "fGmEM3V3mykzkIwhy3YukcSEwqvlKRdWhosPRA5Grsw="
+            }
+          },
+          "AddDashuserLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "S3Key": "serverless/kuiski-api/v1/1518913012821-2018-02-18T00:16:52.821Z/kuiski-api.zip"
+              },
+              "FunctionName": "kuiski-api-v1-add-user",
+              "Handler": "src/users.addUser",
+              "MemorySize": 1024,
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              },
+              "Runtime": "nodejs6.10",
+              "Timeout": 6,
+              "Environment": {
+                "Variables": {
+                  "DYNAMODB_TABLE": "kuiski",
+                  "PUBNUB_PUBLISH_KEY": "pub-c-ce0c67c2-ebed-4b63-a04d-bae8f872e669",
+                  "PUBNUB_SUBSCRIBE_KEY": "sub-c-8f1bb4c4-0cc2-11e8-afa0-d615f40beee2",
+                  "KUISKITAN_ACCESS_TOKEN": "VV47ruVNSSYbIThZFOYIEJrKRQtCbmdkaob6HXJmuSafi1asFM+H4uyLjF794jBPvTXOwIHx5teRenbGqDHwMYAuD7JGTguHPhCp/JOvxmCJN59Jfvg5sslfen+moNfhmObrHznq8HRhpFi2AmgfZwdB04t89/1O/w1cDnyilFU=",
+                  "KUISKITAN_CHANNEL_SECRET": "0913b18d40a0d56766f8d96ff117b8e8",
+                  "CLOUDINARY_CLOUD_NAME": "dke5tzfyy",
+                  "CLOUDINARY_API_KEY": "382374726353465",
+                  "CLOUDINARY_API_SECRET": "q-mDFpDJK42HSJpPrfPxWwEwp_M",
+                  "GOOGLE_MAP_KEY": "AIzaSyBuRCLdclMyL_JdEHONdZxB8-I5u2d1vpA"
+                }
+              }
+            },
+            "DependsOn": [
+              "AddDashuserLogGroup",
+              "IamRoleLambdaExecution"
+            ]
+          },
+          "AddDashuserLambdaVersionROF16JQojw5Pbz5VuOF8CbLXyhTIvTCLO0jkekJ8": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "AddDashuserLambdaFunction"
+              },
+              "CodeSha256": "fGmEM3V3mykzkIwhy3YukcSEwqvlKRdWhosPRA5Grsw="
+            }
+          },
+          "ListDashusersLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "S3Key": "serverless/kuiski-api/v1/1518913012821-2018-02-18T00:16:52.821Z/kuiski-api.zip"
+              },
+              "FunctionName": "kuiski-api-v1-list-users",
+              "Handler": "src/users.listUsers",
+              "MemorySize": 1024,
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              },
+              "Runtime": "nodejs6.10",
+              "Timeout": 6,
+              "Environment": {
+                "Variables": {
+                  "DYNAMODB_TABLE": "kuiski",
+                  "PUBNUB_PUBLISH_KEY": "pub-c-ce0c67c2-ebed-4b63-a04d-bae8f872e669",
+                  "PUBNUB_SUBSCRIBE_KEY": "sub-c-8f1bb4c4-0cc2-11e8-afa0-d615f40beee2",
+                  "KUISKITAN_ACCESS_TOKEN": "VV47ruVNSSYbIThZFOYIEJrKRQtCbmdkaob6HXJmuSafi1asFM+H4uyLjF794jBPvTXOwIHx5teRenbGqDHwMYAuD7JGTguHPhCp/JOvxmCJN59Jfvg5sslfen+moNfhmObrHznq8HRhpFi2AmgfZwdB04t89/1O/w1cDnyilFU=",
+                  "KUISKITAN_CHANNEL_SECRET": "0913b18d40a0d56766f8d96ff117b8e8",
+                  "CLOUDINARY_CLOUD_NAME": "dke5tzfyy",
+                  "CLOUDINARY_API_KEY": "382374726353465",
+                  "CLOUDINARY_API_SECRET": "q-mDFpDJK42HSJpPrfPxWwEwp_M",
+                  "GOOGLE_MAP_KEY": "AIzaSyBuRCLdclMyL_JdEHONdZxB8-I5u2d1vpA"
+                }
+              }
+            },
+            "DependsOn": [
+              "ListDashusersLogGroup",
+              "IamRoleLambdaExecution"
+            ]
+          },
+          "ListDashusersLambdaVersion4mwtcZCtpKqTzJIgPhXJ1Gi2fNu3T2WDbTsMpcNx4": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "ListDashusersLambdaFunction"
+              },
+              "CodeSha256": "fGmEM3V3mykzkIwhy3YukcSEwqvlKRdWhosPRA5Grsw="
+            }
+          },
+          "UpdateDashuserDashdebtLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "S3Key": "serverless/kuiski-api/v1/1518913012821-2018-02-18T00:16:52.821Z/kuiski-api.zip"
+              },
+              "FunctionName": "kuiski-api-v1-update-user-debt",
+              "Handler": "src/users.updateDebt",
+              "MemorySize": 1024,
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              },
+              "Runtime": "nodejs6.10",
+              "Timeout": 6,
+              "Environment": {
+                "Variables": {
+                  "DYNAMODB_TABLE": "kuiski",
+                  "PUBNUB_PUBLISH_KEY": "pub-c-ce0c67c2-ebed-4b63-a04d-bae8f872e669",
+                  "PUBNUB_SUBSCRIBE_KEY": "sub-c-8f1bb4c4-0cc2-11e8-afa0-d615f40beee2",
+                  "KUISKITAN_ACCESS_TOKEN": "VV47ruVNSSYbIThZFOYIEJrKRQtCbmdkaob6HXJmuSafi1asFM+H4uyLjF794jBPvTXOwIHx5teRenbGqDHwMYAuD7JGTguHPhCp/JOvxmCJN59Jfvg5sslfen+moNfhmObrHznq8HRhpFi2AmgfZwdB04t89/1O/w1cDnyilFU=",
+                  "KUISKITAN_CHANNEL_SECRET": "0913b18d40a0d56766f8d96ff117b8e8",
+                  "CLOUDINARY_CLOUD_NAME": "dke5tzfyy",
+                  "CLOUDINARY_API_KEY": "382374726353465",
+                  "CLOUDINARY_API_SECRET": "q-mDFpDJK42HSJpPrfPxWwEwp_M",
+                  "GOOGLE_MAP_KEY": "AIzaSyBuRCLdclMyL_JdEHONdZxB8-I5u2d1vpA"
+                }
+              }
+            },
+            "DependsOn": [
+              "UpdateDashuserDashdebtLogGroup",
+              "IamRoleLambdaExecution"
+            ]
+          },
+          "UpdateDashuserDashdebtLambdaVersionPYFKhup94dE0MYAseAOOLtDUplsExd9Mib5WfaJy5s": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "UpdateDashuserDashdebtLambdaFunction"
+              },
+              "CodeSha256": "fGmEM3V3mykzkIwhy3YukcSEwqvlKRdWhosPRA5Grsw="
+            }
+          },
+          "KuistanDashtextLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "S3Key": "serverless/kuiski-api/v1/1518913012821-2018-02-18T00:16:52.821Z/kuiski-api.zip"
+              },
+              "FunctionName": "kuiski-api-v1-kuistan-text",
+              "Handler": "src/kuiskitan.text",
+              "MemorySize": 1024,
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              },
+              "Runtime": "nodejs6.10",
+              "Timeout": 6,
+              "Environment": {
+                "Variables": {
+                  "DYNAMODB_TABLE": "kuiski",
+                  "PUBNUB_PUBLISH_KEY": "pub-c-ce0c67c2-ebed-4b63-a04d-bae8f872e669",
+                  "PUBNUB_SUBSCRIBE_KEY": "sub-c-8f1bb4c4-0cc2-11e8-afa0-d615f40beee2",
+                  "KUISKITAN_ACCESS_TOKEN": "VV47ruVNSSYbIThZFOYIEJrKRQtCbmdkaob6HXJmuSafi1asFM+H4uyLjF794jBPvTXOwIHx5teRenbGqDHwMYAuD7JGTguHPhCp/JOvxmCJN59Jfvg5sslfen+moNfhmObrHznq8HRhpFi2AmgfZwdB04t89/1O/w1cDnyilFU=",
+                  "KUISKITAN_CHANNEL_SECRET": "0913b18d40a0d56766f8d96ff117b8e8",
+                  "CLOUDINARY_CLOUD_NAME": "dke5tzfyy",
+                  "CLOUDINARY_API_KEY": "382374726353465",
+                  "CLOUDINARY_API_SECRET": "q-mDFpDJK42HSJpPrfPxWwEwp_M",
+                  "GOOGLE_MAP_KEY": "AIzaSyBuRCLdclMyL_JdEHONdZxB8-I5u2d1vpA"
+                }
+              }
+            },
+            "DependsOn": [
+              "KuistanDashtextLogGroup",
+              "IamRoleLambdaExecution"
+            ]
+          },
+          "KuistanDashtextLambdaVersionxkUnUyNNrfu81DiR49O6Ok0W1KjAtRxHrVZKFUfI4": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "KuistanDashtextLambdaFunction"
+              },
+              "CodeSha256": "fGmEM3V3mykzkIwhy3YukcSEwqvlKRdWhosPRA5Grsw="
+            }
+          },
+          "KuistanDashdialogLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "S3Key": "serverless/kuiski-api/v1/1518913012821-2018-02-18T00:16:52.821Z/kuiski-api.zip"
+              },
+              "FunctionName": "kuiski-api-v1-kuistan-dialog",
+              "Handler": "src/kuiskitan.dialog",
+              "MemorySize": 1024,
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              },
+              "Runtime": "nodejs6.10",
+              "Timeout": 6,
+              "Environment": {
+                "Variables": {
+                  "DYNAMODB_TABLE": "kuiski",
+                  "PUBNUB_PUBLISH_KEY": "pub-c-ce0c67c2-ebed-4b63-a04d-bae8f872e669",
+                  "PUBNUB_SUBSCRIBE_KEY": "sub-c-8f1bb4c4-0cc2-11e8-afa0-d615f40beee2",
+                  "KUISKITAN_ACCESS_TOKEN": "VV47ruVNSSYbIThZFOYIEJrKRQtCbmdkaob6HXJmuSafi1asFM+H4uyLjF794jBPvTXOwIHx5teRenbGqDHwMYAuD7JGTguHPhCp/JOvxmCJN59Jfvg5sslfen+moNfhmObrHznq8HRhpFi2AmgfZwdB04t89/1O/w1cDnyilFU=",
+                  "KUISKITAN_CHANNEL_SECRET": "0913b18d40a0d56766f8d96ff117b8e8",
+                  "CLOUDINARY_CLOUD_NAME": "dke5tzfyy",
+                  "CLOUDINARY_API_KEY": "382374726353465",
+                  "CLOUDINARY_API_SECRET": "q-mDFpDJK42HSJpPrfPxWwEwp_M",
+                  "GOOGLE_MAP_KEY": "AIzaSyBuRCLdclMyL_JdEHONdZxB8-I5u2d1vpA"
+                }
+              }
+            },
+            "DependsOn": [
+              "KuistanDashdialogLogGroup",
+              "IamRoleLambdaExecution"
+            ]
+          },
+          "KuistanDashdialogLambdaVersion4sjpd1IFkvNYIdJLOMTWjlP65ZDtPhdK4aZIPG3jM": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "KuistanDashdialogLambdaFunction"
+              },
+              "CodeSha256": "fGmEM3V3mykzkIwhy3YukcSEwqvlKRdWhosPRA5Grsw="
+            }
+          },
+          "KuistanDashimageLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "S3Key": "serverless/kuiski-api/v1/1518913012821-2018-02-18T00:16:52.821Z/kuiski-api.zip"
+              },
+              "FunctionName": "kuiski-api-v1-kuistan-image",
+              "Handler": "src/kuiskitan.image",
+              "MemorySize": 1024,
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              },
+              "Runtime": "nodejs6.10",
+              "Timeout": 6,
+              "Environment": {
+                "Variables": {
+                  "DYNAMODB_TABLE": "kuiski",
+                  "PUBNUB_PUBLISH_KEY": "pub-c-ce0c67c2-ebed-4b63-a04d-bae8f872e669",
+                  "PUBNUB_SUBSCRIBE_KEY": "sub-c-8f1bb4c4-0cc2-11e8-afa0-d615f40beee2",
+                  "KUISKITAN_ACCESS_TOKEN": "VV47ruVNSSYbIThZFOYIEJrKRQtCbmdkaob6HXJmuSafi1asFM+H4uyLjF794jBPvTXOwIHx5teRenbGqDHwMYAuD7JGTguHPhCp/JOvxmCJN59Jfvg5sslfen+moNfhmObrHznq8HRhpFi2AmgfZwdB04t89/1O/w1cDnyilFU=",
+                  "KUISKITAN_CHANNEL_SECRET": "0913b18d40a0d56766f8d96ff117b8e8",
+                  "CLOUDINARY_CLOUD_NAME": "dke5tzfyy",
+                  "CLOUDINARY_API_KEY": "382374726353465",
+                  "CLOUDINARY_API_SECRET": "q-mDFpDJK42HSJpPrfPxWwEwp_M",
+                  "GOOGLE_MAP_KEY": "AIzaSyBuRCLdclMyL_JdEHONdZxB8-I5u2d1vpA"
+                }
+              }
+            },
+            "DependsOn": [
+              "KuistanDashimageLogGroup",
+              "IamRoleLambdaExecution"
+            ]
+          },
+          "KuistanDashimageLambdaVersionI5qGWrH1V3jUoaZXChxvSrCurQzj7CLW6sDagEi7Y": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "KuistanDashimageLambdaFunction"
+              },
+              "CodeSha256": "fGmEM3V3mykzkIwhy3YukcSEwqvlKRdWhosPRA5Grsw="
+            }
+          },
+          "KuistanDashwebhookLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "S3Key": "serverless/kuiski-api/v1/1518913012821-2018-02-18T00:16:52.821Z/kuiski-api.zip"
+              },
+              "FunctionName": "kuiski-api-v1-kuistan-webhook",
+              "Handler": "src/kuiskitan.webhook",
+              "MemorySize": 1024,
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              },
+              "Runtime": "nodejs6.10",
+              "Timeout": 6,
+              "Environment": {
+                "Variables": {
+                  "DYNAMODB_TABLE": "kuiski",
+                  "PUBNUB_PUBLISH_KEY": "pub-c-ce0c67c2-ebed-4b63-a04d-bae8f872e669",
+                  "PUBNUB_SUBSCRIBE_KEY": "sub-c-8f1bb4c4-0cc2-11e8-afa0-d615f40beee2",
+                  "KUISKITAN_ACCESS_TOKEN": "VV47ruVNSSYbIThZFOYIEJrKRQtCbmdkaob6HXJmuSafi1asFM+H4uyLjF794jBPvTXOwIHx5teRenbGqDHwMYAuD7JGTguHPhCp/JOvxmCJN59Jfvg5sslfen+moNfhmObrHznq8HRhpFi2AmgfZwdB04t89/1O/w1cDnyilFU=",
+                  "KUISKITAN_CHANNEL_SECRET": "0913b18d40a0d56766f8d96ff117b8e8",
+                  "CLOUDINARY_CLOUD_NAME": "dke5tzfyy",
+                  "CLOUDINARY_API_KEY": "382374726353465",
+                  "CLOUDINARY_API_SECRET": "q-mDFpDJK42HSJpPrfPxWwEwp_M",
+                  "GOOGLE_MAP_KEY": "AIzaSyBuRCLdclMyL_JdEHONdZxB8-I5u2d1vpA"
+                }
+              }
+            },
+            "DependsOn": [
+              "KuistanDashwebhookLogGroup",
+              "IamRoleLambdaExecution"
+            ]
+          },
+          "KuistanDashwebhookLambdaVersionyh6Qgxrf2ZX4hvWmPtOD1xB1zJCDeLgYgOAlX5iH6s": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "KuistanDashwebhookLambdaFunction"
+              },
+              "CodeSha256": "fGmEM3V3mykzkIwhy3YukcSEwqvlKRdWhosPRA5Grsw="
+            }
+          },
+          "AuthLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "S3Key": "serverless/kuiski-api/v1/1518913012821-2018-02-18T00:16:52.821Z/kuiski-api.zip"
+              },
+              "FunctionName": "kuiski-api-v1-auth",
+              "Handler": "src/auth.handler",
+              "MemorySize": 1024,
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              },
+              "Runtime": "nodejs6.10",
+              "Timeout": 6,
+              "Environment": {
+                "Variables": {
+                  "DYNAMODB_TABLE": "kuiski",
+                  "PUBNUB_PUBLISH_KEY": "pub-c-ce0c67c2-ebed-4b63-a04d-bae8f872e669",
+                  "PUBNUB_SUBSCRIBE_KEY": "sub-c-8f1bb4c4-0cc2-11e8-afa0-d615f40beee2",
+                  "KUISKITAN_ACCESS_TOKEN": "VV47ruVNSSYbIThZFOYIEJrKRQtCbmdkaob6HXJmuSafi1asFM+H4uyLjF794jBPvTXOwIHx5teRenbGqDHwMYAuD7JGTguHPhCp/JOvxmCJN59Jfvg5sslfen+moNfhmObrHznq8HRhpFi2AmgfZwdB04t89/1O/w1cDnyilFU=",
+                  "KUISKITAN_CHANNEL_SECRET": "0913b18d40a0d56766f8d96ff117b8e8",
+                  "CLOUDINARY_CLOUD_NAME": "dke5tzfyy",
+                  "CLOUDINARY_API_KEY": "382374726353465",
+                  "CLOUDINARY_API_SECRET": "q-mDFpDJK42HSJpPrfPxWwEwp_M",
+                  "GOOGLE_MAP_KEY": "AIzaSyBuRCLdclMyL_JdEHONdZxB8-I5u2d1vpA"
+                }
+              }
+            },
+            "DependsOn": [
+              "AuthLogGroup",
+              "IamRoleLambdaExecution"
+            ]
+          },
+          "AuthLambdaVersionPu4rAKjMMmRMXLZW3HVzfIyWFv6T81PHQHlTmCiRg": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "AuthLambdaFunction"
+              },
+              "CodeSha256": "fGmEM3V3mykzkIwhy3YukcSEwqvlKRdWhosPRA5Grsw="
+            }
+          },
+          "ListDashimageLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "S3Key": "serverless/kuiski-api/v1/1518913012821-2018-02-18T00:16:52.821Z/kuiski-api.zip"
+              },
+              "FunctionName": "kuiski-api-v1-list-image",
+              "Handler": "src/images.list",
+              "MemorySize": 1024,
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              },
+              "Runtime": "nodejs6.10",
+              "Timeout": 6,
+              "Environment": {
+                "Variables": {
+                  "DYNAMODB_TABLE": "kuiski",
+                  "PUBNUB_PUBLISH_KEY": "pub-c-ce0c67c2-ebed-4b63-a04d-bae8f872e669",
+                  "PUBNUB_SUBSCRIBE_KEY": "sub-c-8f1bb4c4-0cc2-11e8-afa0-d615f40beee2",
+                  "KUISKITAN_ACCESS_TOKEN": "VV47ruVNSSYbIThZFOYIEJrKRQtCbmdkaob6HXJmuSafi1asFM+H4uyLjF794jBPvTXOwIHx5teRenbGqDHwMYAuD7JGTguHPhCp/JOvxmCJN59Jfvg5sslfen+moNfhmObrHznq8HRhpFi2AmgfZwdB04t89/1O/w1cDnyilFU=",
+                  "KUISKITAN_CHANNEL_SECRET": "0913b18d40a0d56766f8d96ff117b8e8",
+                  "CLOUDINARY_CLOUD_NAME": "dke5tzfyy",
+                  "CLOUDINARY_API_KEY": "382374726353465",
+                  "CLOUDINARY_API_SECRET": "q-mDFpDJK42HSJpPrfPxWwEwp_M",
+                  "GOOGLE_MAP_KEY": "AIzaSyBuRCLdclMyL_JdEHONdZxB8-I5u2d1vpA"
+                }
+              }
+            },
+            "DependsOn": [
+              "ListDashimageLogGroup",
+              "IamRoleLambdaExecution"
+            ]
+          },
+          "ListDashimageLambdaVersion5zSytaGZrAZ6Q3OnoDjpGPejp5sNBPI1zyG6voBLY": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "ListDashimageLambdaFunction"
+              },
+              "CodeSha256": "fGmEM3V3mykzkIwhy3YukcSEwqvlKRdWhosPRA5Grsw="
+            }
+          },
+          "ApiGatewayRestApi": {
+            "Type": "AWS::ApiGateway::RestApi",
+            "Properties": {
+              "Name": "v1-kuiski-api",
+              "EndpointConfiguration": {
+                "Types": [
+                  "EDGE"
+                ]
+              }
+            }
+          },
+          "ApiGatewayResourceNotify": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "ParentId": {
+                "Fn::GetAtt": [
+                  "ApiGatewayRestApi",
+                  "RootResourceId"
+                ]
+              },
+              "PathPart": "notify",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayResourceEvent": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "ParentId": {
+                "Fn::GetAtt": [
+                  "ApiGatewayRestApi",
+                  "RootResourceId"
+                ]
+              },
+              "PathPart": "event",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayResourceEventEventidVar": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "ParentId": {
+                "Ref": "ApiGatewayResourceEvent"
+              },
+              "PathPart": "{eventId}",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayResourceEventEventidVarUsers": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "ParentId": {
+                "Ref": "ApiGatewayResourceEventEventidVar"
+              },
+              "PathPart": "users",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayResourceEventEventidVarUsersUseridVar": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "ParentId": {
+                "Ref": "ApiGatewayResourceEventEventidVarUsers"
+              },
+              "PathPart": "{userId}",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayResourceEventEventidVarUsersUseridVarDebt": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "ParentId": {
+                "Ref": "ApiGatewayResourceEventEventidVarUsersUseridVar"
+              },
+              "PathPart": "debt",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayResourceKuiskitan": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "ParentId": {
+                "Fn::GetAtt": [
+                  "ApiGatewayRestApi",
+                  "RootResourceId"
+                ]
+              },
+              "PathPart": "kuiskitan",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayResourceKuiskitanText": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "ParentId": {
+                "Ref": "ApiGatewayResourceKuiskitan"
+              },
+              "PathPart": "text",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayResourceKuiskitanDialog": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "ParentId": {
+                "Ref": "ApiGatewayResourceKuiskitan"
+              },
+              "PathPart": "dialog",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayResourceKuiskitanImage": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "ParentId": {
+                "Ref": "ApiGatewayResourceKuiskitan"
+              },
+              "PathPart": "image",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayResourceKuiskitanWebhook": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "ParentId": {
+                "Ref": "ApiGatewayResourceKuiskitan"
+              },
+              "PathPart": "webhook",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayResourceAuth": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "ParentId": {
+                "Fn::GetAtt": [
+                  "ApiGatewayRestApi",
+                  "RootResourceId"
+                ]
+              },
+              "PathPart": "auth",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayResourceImages": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "ParentId": {
+                "Fn::GetAtt": [
+                  "ApiGatewayRestApi",
+                  "RootResourceId"
+                ]
+              },
+              "PathPart": "images",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayResourceImagesList": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "ParentId": {
+                "Ref": "ApiGatewayResourceImages"
+              },
+              "PathPart": "list",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayMethodNotifyOptions": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "AuthorizationType": "NONE",
+              "HttpMethod": "OPTIONS",
+              "MethodResponses": [
+                {
+                  "StatusCode": "200",
+                  "ResponseParameters": {
+                    "method.response.header.Access-Control-Allow-Origin": true,
+                    "method.response.header.Access-Control-Allow-Headers": true,
+                    "method.response.header.Access-Control-Allow-Methods": true,
+                    "method.response.header.Access-Control-Allow-Credentials": true
+                  },
+                  "ResponseModels": {}
+                }
+              ],
+              "RequestParameters": {},
+              "Integration": {
+                "Type": "MOCK",
+                "RequestTemplates": {
+                  "application/json": "{statusCode:200}"
+                },
+                "IntegrationResponses": [
+                  {
+                    "StatusCode": "200",
+                    "ResponseParameters": {
+                      "method.response.header.Access-Control-Allow-Origin": "'*'",
+                      "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+                      "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET'",
+                      "method.response.header.Access-Control-Allow-Credentials": "'false'"
+                    },
+                    "ResponseTemplates": {
+                      "application/json": ""
+                    }
+                  }
+                ]
+              },
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceNotify"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayMethodEventEventidVarUsersOptions": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "AuthorizationType": "NONE",
+              "HttpMethod": "OPTIONS",
+              "MethodResponses": [
+                {
+                  "StatusCode": "200",
+                  "ResponseParameters": {
+                    "method.response.header.Access-Control-Allow-Origin": true,
+                    "method.response.header.Access-Control-Allow-Headers": true,
+                    "method.response.header.Access-Control-Allow-Methods": true,
+                    "method.response.header.Access-Control-Allow-Credentials": true
+                  },
+                  "ResponseModels": {}
+                }
+              ],
+              "RequestParameters": {},
+              "Integration": {
+                "Type": "MOCK",
+                "RequestTemplates": {
+                  "application/json": "{statusCode:200}"
+                },
+                "IntegrationResponses": [
+                  {
+                    "StatusCode": "200",
+                    "ResponseParameters": {
+                      "method.response.header.Access-Control-Allow-Origin": "'*'",
+                      "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+                      "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,POST'",
+                      "method.response.header.Access-Control-Allow-Credentials": "'false'"
+                    },
+                    "ResponseTemplates": {
+                      "application/json": ""
+                    }
+                  }
+                ]
+              },
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceEventEventidVarUsers"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayMethodEventEventidVarUsersUseridVarDebtOptions": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "AuthorizationType": "NONE",
+              "HttpMethod": "OPTIONS",
+              "MethodResponses": [
+                {
+                  "StatusCode": "200",
+                  "ResponseParameters": {
+                    "method.response.header.Access-Control-Allow-Origin": true,
+                    "method.response.header.Access-Control-Allow-Headers": true,
+                    "method.response.header.Access-Control-Allow-Methods": true,
+                    "method.response.header.Access-Control-Allow-Credentials": true
+                  },
+                  "ResponseModels": {}
+                }
+              ],
+              "RequestParameters": {},
+              "Integration": {
+                "Type": "MOCK",
+                "RequestTemplates": {
+                  "application/json": "{statusCode:200}"
+                },
+                "IntegrationResponses": [
+                  {
+                    "StatusCode": "200",
+                    "ResponseParameters": {
+                      "method.response.header.Access-Control-Allow-Origin": "'*'",
+                      "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+                      "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,PUT'",
+                      "method.response.header.Access-Control-Allow-Credentials": "'false'"
+                    },
+                    "ResponseTemplates": {
+                      "application/json": ""
+                    }
+                  }
+                ]
+              },
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceEventEventidVarUsersUseridVarDebt"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayMethodKuiskitanTextOptions": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "AuthorizationType": "NONE",
+              "HttpMethod": "OPTIONS",
+              "MethodResponses": [
+                {
+                  "StatusCode": "200",
+                  "ResponseParameters": {
+                    "method.response.header.Access-Control-Allow-Origin": true,
+                    "method.response.header.Access-Control-Allow-Headers": true,
+                    "method.response.header.Access-Control-Allow-Methods": true,
+                    "method.response.header.Access-Control-Allow-Credentials": true
+                  },
+                  "ResponseModels": {}
+                }
+              ],
+              "RequestParameters": {},
+              "Integration": {
+                "Type": "MOCK",
+                "RequestTemplates": {
+                  "application/json": "{statusCode:200}"
+                },
+                "IntegrationResponses": [
+                  {
+                    "StatusCode": "200",
+                    "ResponseParameters": {
+                      "method.response.header.Access-Control-Allow-Origin": "'*'",
+                      "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+                      "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'",
+                      "method.response.header.Access-Control-Allow-Credentials": "'false'"
+                    },
+                    "ResponseTemplates": {
+                      "application/json": ""
+                    }
+                  }
+                ]
+              },
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceKuiskitanText"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayMethodKuiskitanDialogOptions": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "AuthorizationType": "NONE",
+              "HttpMethod": "OPTIONS",
+              "MethodResponses": [
+                {
+                  "StatusCode": "200",
+                  "ResponseParameters": {
+                    "method.response.header.Access-Control-Allow-Origin": true,
+                    "method.response.header.Access-Control-Allow-Headers": true,
+                    "method.response.header.Access-Control-Allow-Methods": true,
+                    "method.response.header.Access-Control-Allow-Credentials": true
+                  },
+                  "ResponseModels": {}
+                }
+              ],
+              "RequestParameters": {},
+              "Integration": {
+                "Type": "MOCK",
+                "RequestTemplates": {
+                  "application/json": "{statusCode:200}"
+                },
+                "IntegrationResponses": [
+                  {
+                    "StatusCode": "200",
+                    "ResponseParameters": {
+                      "method.response.header.Access-Control-Allow-Origin": "'*'",
+                      "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+                      "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'",
+                      "method.response.header.Access-Control-Allow-Credentials": "'false'"
+                    },
+                    "ResponseTemplates": {
+                      "application/json": ""
+                    }
+                  }
+                ]
+              },
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceKuiskitanDialog"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayMethodKuiskitanImageOptions": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "AuthorizationType": "NONE",
+              "HttpMethod": "OPTIONS",
+              "MethodResponses": [
+                {
+                  "StatusCode": "200",
+                  "ResponseParameters": {
+                    "method.response.header.Access-Control-Allow-Origin": true,
+                    "method.response.header.Access-Control-Allow-Headers": true,
+                    "method.response.header.Access-Control-Allow-Methods": true,
+                    "method.response.header.Access-Control-Allow-Credentials": true
+                  },
+                  "ResponseModels": {}
+                }
+              ],
+              "RequestParameters": {},
+              "Integration": {
+                "Type": "MOCK",
+                "RequestTemplates": {
+                  "application/json": "{statusCode:200}"
+                },
+                "IntegrationResponses": [
+                  {
+                    "StatusCode": "200",
+                    "ResponseParameters": {
+                      "method.response.header.Access-Control-Allow-Origin": "'*'",
+                      "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+                      "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'",
+                      "method.response.header.Access-Control-Allow-Credentials": "'false'"
+                    },
+                    "ResponseTemplates": {
+                      "application/json": ""
+                    }
+                  }
+                ]
+              },
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceKuiskitanImage"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayMethodKuiskitanWebhookOptions": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "AuthorizationType": "NONE",
+              "HttpMethod": "OPTIONS",
+              "MethodResponses": [
+                {
+                  "StatusCode": "200",
+                  "ResponseParameters": {
+                    "method.response.header.Access-Control-Allow-Origin": true,
+                    "method.response.header.Access-Control-Allow-Headers": true,
+                    "method.response.header.Access-Control-Allow-Methods": true,
+                    "method.response.header.Access-Control-Allow-Credentials": true
+                  },
+                  "ResponseModels": {}
+                }
+              ],
+              "RequestParameters": {},
+              "Integration": {
+                "Type": "MOCK",
+                "RequestTemplates": {
+                  "application/json": "{statusCode:200}"
+                },
+                "IntegrationResponses": [
+                  {
+                    "StatusCode": "200",
+                    "ResponseParameters": {
+                      "method.response.header.Access-Control-Allow-Origin": "'*'",
+                      "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+                      "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'",
+                      "method.response.header.Access-Control-Allow-Credentials": "'false'"
+                    },
+                    "ResponseTemplates": {
+                      "application/json": ""
+                    }
+                  }
+                ]
+              },
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceKuiskitanWebhook"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayMethodAuthOptions": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "AuthorizationType": "NONE",
+              "HttpMethod": "OPTIONS",
+              "MethodResponses": [
+                {
+                  "StatusCode": "200",
+                  "ResponseParameters": {
+                    "method.response.header.Access-Control-Allow-Origin": true,
+                    "method.response.header.Access-Control-Allow-Headers": true,
+                    "method.response.header.Access-Control-Allow-Methods": true,
+                    "method.response.header.Access-Control-Allow-Credentials": true
+                  },
+                  "ResponseModels": {}
+                }
+              ],
+              "RequestParameters": {},
+              "Integration": {
+                "Type": "MOCK",
+                "RequestTemplates": {
+                  "application/json": "{statusCode:200}"
+                },
+                "IntegrationResponses": [
+                  {
+                    "StatusCode": "200",
+                    "ResponseParameters": {
+                      "method.response.header.Access-Control-Allow-Origin": "'*'",
+                      "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+                      "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET'",
+                      "method.response.header.Access-Control-Allow-Credentials": "'false'"
+                    },
+                    "ResponseTemplates": {
+                      "application/json": ""
+                    }
+                  }
+                ]
+              },
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceAuth"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayMethodImagesListOptions": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "AuthorizationType": "NONE",
+              "HttpMethod": "OPTIONS",
+              "MethodResponses": [
+                {
+                  "StatusCode": "200",
+                  "ResponseParameters": {
+                    "method.response.header.Access-Control-Allow-Origin": true,
+                    "method.response.header.Access-Control-Allow-Headers": true,
+                    "method.response.header.Access-Control-Allow-Methods": true,
+                    "method.response.header.Access-Control-Allow-Credentials": true
+                  },
+                  "ResponseModels": {}
+                }
+              ],
+              "RequestParameters": {},
+              "Integration": {
+                "Type": "MOCK",
+                "RequestTemplates": {
+                  "application/json": "{statusCode:200}"
+                },
+                "IntegrationResponses": [
+                  {
+                    "StatusCode": "200",
+                    "ResponseParameters": {
+                      "method.response.header.Access-Control-Allow-Origin": "'*'",
+                      "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+                      "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET'",
+                      "method.response.header.Access-Control-Allow-Credentials": "'false'"
+                    },
+                    "ResponseTemplates": {
+                      "application/json": ""
+                    }
+                  }
+                ]
+              },
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceImagesList"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayMethodNotifyGet": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "HttpMethod": "GET",
+              "RequestParameters": {},
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceNotify"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "ApiKeyRequired": false,
+              "AuthorizationType": "NONE",
+              "Integration": {
+                "IntegrationHttpMethod": "POST",
+                "Type": "AWS_PROXY",
+                "Uri": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":lambda:path/2015-03-31/functions/",
+                      {
+                        "Fn::GetAtt": [
+                          "NotifyLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "/invocations"
+                    ]
+                  ]
+                }
+              },
+              "MethodResponses": []
+            }
+          },
+          "ApiGatewayMethodEventEventidVarUsersPost": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "HttpMethod": "POST",
+              "RequestParameters": {
+                "method.request.path.eventId": true
+              },
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceEventEventidVarUsers"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "ApiKeyRequired": false,
+              "AuthorizationType": "NONE",
+              "Integration": {
+                "IntegrationHttpMethod": "POST",
+                "Type": "AWS_PROXY",
+                "Uri": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":lambda:path/2015-03-31/functions/",
+                      {
+                        "Fn::GetAtt": [
+                          "AddDashuserLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "/invocations"
+                    ]
+                  ]
+                }
+              },
+              "MethodResponses": []
+            }
+          },
+          "ApiGatewayMethodEventEventidVarUsersGet": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "HttpMethod": "GET",
+              "RequestParameters": {
+                "method.request.path.eventId": true
+              },
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceEventEventidVarUsers"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "ApiKeyRequired": false,
+              "AuthorizationType": "NONE",
+              "Integration": {
+                "IntegrationHttpMethod": "POST",
+                "Type": "AWS_PROXY",
+                "Uri": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":lambda:path/2015-03-31/functions/",
+                      {
+                        "Fn::GetAtt": [
+                          "ListDashusersLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "/invocations"
+                    ]
+                  ]
+                }
+              },
+              "MethodResponses": []
+            }
+          },
+          "ApiGatewayMethodEventEventidVarUsersUseridVarDebtPut": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "HttpMethod": "PUT",
+              "RequestParameters": {
+                "method.request.path.eventId": true,
+                "method.request.path.userId": true
+              },
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceEventEventidVarUsersUseridVarDebt"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "ApiKeyRequired": false,
+              "AuthorizationType": "NONE",
+              "Integration": {
+                "IntegrationHttpMethod": "POST",
+                "Type": "AWS_PROXY",
+                "Uri": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":lambda:path/2015-03-31/functions/",
+                      {
+                        "Fn::GetAtt": [
+                          "UpdateDashuserDashdebtLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "/invocations"
+                    ]
+                  ]
+                }
+              },
+              "MethodResponses": []
+            }
+          },
+          "ApiGatewayMethodKuiskitanTextPost": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "HttpMethod": "POST",
+              "RequestParameters": {},
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceKuiskitanText"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "ApiKeyRequired": false,
+              "AuthorizationType": "NONE",
+              "Integration": {
+                "IntegrationHttpMethod": "POST",
+                "Type": "AWS_PROXY",
+                "Uri": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":lambda:path/2015-03-31/functions/",
+                      {
+                        "Fn::GetAtt": [
+                          "KuistanDashtextLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "/invocations"
+                    ]
+                  ]
+                }
+              },
+              "MethodResponses": []
+            }
+          },
+          "ApiGatewayMethodKuiskitanDialogPost": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "HttpMethod": "POST",
+              "RequestParameters": {},
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceKuiskitanDialog"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "ApiKeyRequired": false,
+              "AuthorizationType": "NONE",
+              "Integration": {
+                "IntegrationHttpMethod": "POST",
+                "Type": "AWS_PROXY",
+                "Uri": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":lambda:path/2015-03-31/functions/",
+                      {
+                        "Fn::GetAtt": [
+                          "KuistanDashdialogLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "/invocations"
+                    ]
+                  ]
+                }
+              },
+              "MethodResponses": []
+            }
+          },
+          "ApiGatewayMethodKuiskitanImagePost": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "HttpMethod": "POST",
+              "RequestParameters": {},
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceKuiskitanImage"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "ApiKeyRequired": false,
+              "AuthorizationType": "NONE",
+              "Integration": {
+                "IntegrationHttpMethod": "POST",
+                "Type": "AWS_PROXY",
+                "Uri": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":lambda:path/2015-03-31/functions/",
+                      {
+                        "Fn::GetAtt": [
+                          "KuistanDashimageLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "/invocations"
+                    ]
+                  ]
+                }
+              },
+              "MethodResponses": []
+            }
+          },
+          "ApiGatewayMethodKuiskitanWebhookPost": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "HttpMethod": "POST",
+              "RequestParameters": {},
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceKuiskitanWebhook"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "ApiKeyRequired": false,
+              "AuthorizationType": "NONE",
+              "Integration": {
+                "IntegrationHttpMethod": "POST",
+                "Type": "AWS_PROXY",
+                "Uri": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":lambda:path/2015-03-31/functions/",
+                      {
+                        "Fn::GetAtt": [
+                          "KuistanDashwebhookLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "/invocations"
+                    ]
+                  ]
+                }
+              },
+              "MethodResponses": []
+            }
+          },
+          "ApiGatewayMethodAuthGet": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "HttpMethod": "GET",
+              "RequestParameters": {},
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceAuth"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "ApiKeyRequired": false,
+              "AuthorizationType": "NONE",
+              "Integration": {
+                "IntegrationHttpMethod": "POST",
+                "Type": "AWS_PROXY",
+                "Uri": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":lambda:path/2015-03-31/functions/",
+                      {
+                        "Fn::GetAtt": [
+                          "AuthLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "/invocations"
+                    ]
+                  ]
+                }
+              },
+              "MethodResponses": []
+            }
+          },
+          "ApiGatewayMethodImagesListGet": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "HttpMethod": "GET",
+              "RequestParameters": {},
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceImagesList"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "ApiKeyRequired": false,
+              "AuthorizationType": "NONE",
+              "Integration": {
+                "IntegrationHttpMethod": "POST",
+                "Type": "AWS_PROXY",
+                "Uri": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":lambda:path/2015-03-31/functions/",
+                      {
+                        "Fn::GetAtt": [
+                          "ListDashimageLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "/invocations"
+                    ]
+                  ]
+                }
+              },
+              "MethodResponses": []
+            }
+          },
+          "ApiGatewayDeployment1518913013972": {
+            "Type": "AWS::ApiGateway::Deployment",
+            "Properties": {
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "StageName": "v1"
+            },
+            "DependsOn": [
+              "ApiGatewayMethodNotifyGet",
+              "ApiGatewayMethodEventEventidVarUsersPost",
+              "ApiGatewayMethodEventEventidVarUsersGet",
+              "ApiGatewayMethodEventEventidVarUsersUseridVarDebtPut",
+              "ApiGatewayMethodKuiskitanTextPost",
+              "ApiGatewayMethodKuiskitanDialogPost",
+              "ApiGatewayMethodKuiskitanImagePost",
+              "ApiGatewayMethodKuiskitanWebhookPost",
+              "ApiGatewayMethodAuthGet",
+              "ApiGatewayMethodImagesListGet"
+            ]
+          },
+          "NotifyLambdaPermissionApiGateway": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "NotifyLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:aws:execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    "/*/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "AddDashuserLambdaPermissionApiGateway": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "AddDashuserLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:aws:execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    "/*/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "ListDashusersLambdaPermissionApiGateway": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "ListDashusersLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:aws:execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    "/*/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "UpdateDashuserDashdebtLambdaPermissionApiGateway": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "UpdateDashuserDashdebtLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:aws:execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    "/*/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "KuistanDashtextLambdaPermissionApiGateway": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "KuistanDashtextLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:aws:execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    "/*/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "KuistanDashdialogLambdaPermissionApiGateway": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "KuistanDashdialogLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:aws:execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    "/*/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "KuistanDashimageLambdaPermissionApiGateway": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "KuistanDashimageLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:aws:execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    "/*/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "KuistanDashwebhookLambdaPermissionApiGateway": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "KuistanDashwebhookLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:aws:execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    "/*/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "AuthLambdaPermissionApiGateway": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "AuthLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:aws:execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    "/*/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "ListDashimageLambdaPermissionApiGateway": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "ListDashimageLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:aws:execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    "/*/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "pathmapping": {
+            "Type": "AWS::ApiGateway::BasePathMapping",
+            "DependsOn": [
+              "ApiGatewayDeployment1518913013972"
+            ],
+            "Properties": {
+              "BasePath": "(none)",
+              "DomainName": "api.kuis.ski",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "Stage": "v1"
+            }
+          },
+          "kuiskiTable": {
+            "Type": "AWS::DynamoDB::Table",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "AttributeDefinitions": [
+                {
+                  "AttributeName": "group",
+                  "AttributeType": "S"
+                },
+                {
+                  "AttributeName": "key",
+                  "AttributeType": "S"
+                }
+              ],
+              "KeySchema": [
+                {
+                  "AttributeName": "group",
+                  "KeyType": "HASH"
+                },
+                {
+                  "AttributeName": "key",
+                  "KeyType": "RANGE"
+                }
+              ],
+              "ProvisionedThroughput": {
+                "ReadCapacityUnits": 5,
+                "WriteCapacityUnits": 5
+              },
+              "TableName": "kuiski"
+            }
+          }
+        },
+        "Outputs": {
+          "ServerlessDeploymentBucketName": {
+            "Value": {
+              "Ref": "ServerlessDeploymentBucket"
+            }
+          },
+          "NotifyLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "NotifyLambdaVersionJECfQailQOwXZvIErIXZ2uoojAcZP3XL2aGWa1xqQ"
+            }
+          },
+          "AddDashuserLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "AddDashuserLambdaVersionROF16JQojw5Pbz5VuOF8CbLXyhTIvTCLO0jkekJ8"
+            }
+          },
+          "ListDashusersLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "ListDashusersLambdaVersion4mwtcZCtpKqTzJIgPhXJ1Gi2fNu3T2WDbTsMpcNx4"
+            }
+          },
+          "UpdateDashuserDashdebtLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "UpdateDashuserDashdebtLambdaVersionPYFKhup94dE0MYAseAOOLtDUplsExd9Mib5WfaJy5s"
+            }
+          },
+          "KuistanDashtextLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "KuistanDashtextLambdaVersionxkUnUyNNrfu81DiR49O6Ok0W1KjAtRxHrVZKFUfI4"
+            }
+          },
+          "KuistanDashdialogLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "KuistanDashdialogLambdaVersion4sjpd1IFkvNYIdJLOMTWjlP65ZDtPhdK4aZIPG3jM"
+            }
+          },
+          "KuistanDashimageLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "KuistanDashimageLambdaVersionI5qGWrH1V3jUoaZXChxvSrCurQzj7CLW6sDagEi7Y"
+            }
+          },
+          "KuistanDashwebhookLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "KuistanDashwebhookLambdaVersionyh6Qgxrf2ZX4hvWmPtOD1xB1zJCDeLgYgOAlX5iH6s"
+            }
+          },
+          "AuthLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "AuthLambdaVersionPu4rAKjMMmRMXLZW3HVzfIyWFv6T81PHQHlTmCiRg"
+            }
+          },
+          "ListDashimageLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "ListDashimageLambdaVersion5zSytaGZrAZ6Q3OnoDjpGPejp5sNBPI1zyG6voBLY"
+            }
+          },
+          "ServiceEndpoint": {
+            "Description": "URL of the service endpoint",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "https://",
+                  {
+                    "Ref": "ApiGatewayRestApi"
+                  },
+                  ".execute-api.us-east-1.amazonaws.com/v1"
+                ]
+              ]
+            }
+          },
+          "DomainName": {
+            "Value": "d2pcppcbon3to6.cloudfront.net"
+          },
+          "HostedZoneId": {
+            "Value": "Z2FDTNDATAQYW2"
+          }
+        }
+      },
+      "coreCloudFormationTemplate": {
+        "AWSTemplateFormatVersion": "2010-09-09",
+        "Description": "The AWS CloudFormation template for this Serverless application",
+        "Resources": {
+          "ServerlessDeploymentBucket": {
+            "Type": "AWS::S3::Bucket"
+          }
+        },
+        "Outputs": {
+          "ServerlessDeploymentBucketName": {
+            "Value": {
+              "Ref": "ServerlessDeploymentBucket"
+            }
+          }
+        }
+      },
+      "vpc": {}
+    },
+    "custom": {
+      "customDomain": {
+        "domainName": "api.kuis.ski",
+        "basePath": "",
+        "stage": "v1",
+        "createRoute53Record": true
+      }
+    },
+    "plugins": [
+      "serverless-domain-manager"
+    ],
+    "functions": {
+      "notify": {
+        "handler": "src/notify.handler",
+        "events": [
+          {
+            "http": {
+              "path": "notify",
+              "method": "get",
+              "cors": {
+                "origins": [
+                  "*"
+                ],
+                "origin": "*",
+                "methods": [
+                  "OPTIONS",
+                  "GET"
+                ],
+                "headers": [
+                  "Content-Type",
+                  "X-Amz-Date",
+                  "Authorization",
+                  "X-Api-Key",
+                  "X-Amz-Security-Token",
+                  "X-Amz-User-Agent"
+                ],
+                "allowCredentials": false
+              },
+              "integration": "AWS_PROXY"
+            }
+          }
+        ],
+        "name": "kuiski-api-v1-notify",
+        "package": {},
+        "vpc": {}
+      },
+      "add-user": {
+        "handler": "src/users.addUser",
+        "events": [
+          {
+            "http": {
+              "path": "event/{eventId}/users",
+              "method": "post",
+              "cors": {
+                "origins": [
+                  "*"
+                ],
+                "origin": "*",
+                "methods": [
+                  "OPTIONS",
+                  "POST"
+                ],
+                "headers": [
+                  "Content-Type",
+                  "X-Amz-Date",
+                  "Authorization",
+                  "X-Api-Key",
+                  "X-Amz-Security-Token",
+                  "X-Amz-User-Agent"
+                ],
+                "allowCredentials": false
+              },
+              "request": {
+                "parameters": {
+                  "method.request.path.eventId": true
+                }
+              },
+              "integration": "AWS_PROXY"
+            }
+          }
+        ],
+        "name": "kuiski-api-v1-add-user",
+        "package": {},
+        "vpc": {}
+      },
+      "list-users": {
+        "handler": "src/users.listUsers",
+        "events": [
+          {
+            "http": {
+              "path": "event/{eventId}/users",
+              "method": "get",
+              "cors": {
+                "origins": [
+                  "*"
+                ],
+                "origin": "*",
+                "methods": [
+                  "OPTIONS",
+                  "GET"
+                ],
+                "headers": [
+                  "Content-Type",
+                  "X-Amz-Date",
+                  "Authorization",
+                  "X-Api-Key",
+                  "X-Amz-Security-Token",
+                  "X-Amz-User-Agent"
+                ],
+                "allowCredentials": false
+              },
+              "request": {
+                "parameters": {
+                  "method.request.path.eventId": true
+                }
+              },
+              "integration": "AWS_PROXY"
+            }
+          }
+        ],
+        "name": "kuiski-api-v1-list-users",
+        "package": {},
+        "vpc": {}
+      },
+      "update-user-debt": {
+        "handler": "src/users.updateDebt",
+        "events": [
+          {
+            "http": {
+              "path": "event/{eventId}/users/{userId}/debt",
+              "method": "put",
+              "cors": {
+                "origins": [
+                  "*"
+                ],
+                "origin": "*",
+                "methods": [
+                  "OPTIONS",
+                  "PUT"
+                ],
+                "headers": [
+                  "Content-Type",
+                  "X-Amz-Date",
+                  "Authorization",
+                  "X-Api-Key",
+                  "X-Amz-Security-Token",
+                  "X-Amz-User-Agent"
+                ],
+                "allowCredentials": false
+              },
+              "request": {
+                "parameters": {
+                  "method.request.path.eventId": true,
+                  "method.request.path.userId": true
+                }
+              },
+              "integration": "AWS_PROXY"
+            }
+          }
+        ],
+        "name": "kuiski-api-v1-update-user-debt",
+        "package": {},
+        "vpc": {}
+      },
+      "kuistan-text": {
+        "handler": "src/kuiskitan.text",
+        "events": [
+          {
+            "http": {
+              "path": "kuiskitan/text",
+              "method": "post",
+              "cors": {
+                "origins": [
+                  "*"
+                ],
+                "origin": "*",
+                "methods": [
+                  "OPTIONS",
+                  "POST"
+                ],
+                "headers": [
+                  "Content-Type",
+                  "X-Amz-Date",
+                  "Authorization",
+                  "X-Api-Key",
+                  "X-Amz-Security-Token",
+                  "X-Amz-User-Agent"
+                ],
+                "allowCredentials": false
+              },
+              "integration": "AWS_PROXY"
+            }
+          }
+        ],
+        "name": "kuiski-api-v1-kuistan-text",
+        "package": {},
+        "vpc": {}
+      },
+      "kuistan-dialog": {
+        "handler": "src/kuiskitan.dialog",
+        "events": [
+          {
+            "http": {
+              "path": "kuiskitan/dialog",
+              "method": "post",
+              "cors": {
+                "origins": [
+                  "*"
+                ],
+                "origin": "*",
+                "methods": [
+                  "OPTIONS",
+                  "POST"
+                ],
+                "headers": [
+                  "Content-Type",
+                  "X-Amz-Date",
+                  "Authorization",
+                  "X-Api-Key",
+                  "X-Amz-Security-Token",
+                  "X-Amz-User-Agent"
+                ],
+                "allowCredentials": false
+              },
+              "integration": "AWS_PROXY"
+            }
+          }
+        ],
+        "name": "kuiski-api-v1-kuistan-dialog",
+        "package": {},
+        "vpc": {}
+      },
+      "kuistan-image": {
+        "handler": "src/kuiskitan.image",
+        "events": [
+          {
+            "http": {
+              "path": "kuiskitan/image",
+              "method": "post",
+              "cors": {
+                "origins": [
+                  "*"
+                ],
+                "origin": "*",
+                "methods": [
+                  "OPTIONS",
+                  "POST"
+                ],
+                "headers": [
+                  "Content-Type",
+                  "X-Amz-Date",
+                  "Authorization",
+                  "X-Api-Key",
+                  "X-Amz-Security-Token",
+                  "X-Amz-User-Agent"
+                ],
+                "allowCredentials": false
+              },
+              "integration": "AWS_PROXY"
+            }
+          }
+        ],
+        "name": "kuiski-api-v1-kuistan-image",
+        "package": {},
+        "vpc": {}
+      },
+      "kuistan-webhook": {
+        "handler": "src/kuiskitan.webhook",
+        "events": [
+          {
+            "http": {
+              "path": "kuiskitan/webhook",
+              "method": "post",
+              "cors": {
+                "origins": [
+                  "*"
+                ],
+                "origin": "*",
+                "methods": [
+                  "OPTIONS",
+                  "POST"
+                ],
+                "headers": [
+                  "Content-Type",
+                  "X-Amz-Date",
+                  "Authorization",
+                  "X-Api-Key",
+                  "X-Amz-Security-Token",
+                  "X-Amz-User-Agent"
+                ],
+                "allowCredentials": false
+              },
+              "integration": "AWS_PROXY"
+            }
+          }
+        ],
+        "name": "kuiski-api-v1-kuistan-webhook",
+        "package": {},
+        "vpc": {}
+      },
+      "auth": {
+        "handler": "src/auth.handler",
+        "events": [
+          {
+            "http": {
+              "path": "auth",
+              "method": "get",
+              "cors": {
+                "origins": [
+                  "*"
+                ],
+                "origin": "*",
+                "methods": [
+                  "OPTIONS",
+                  "GET"
+                ],
+                "headers": [
+                  "Content-Type",
+                  "X-Amz-Date",
+                  "Authorization",
+                  "X-Api-Key",
+                  "X-Amz-Security-Token",
+                  "X-Amz-User-Agent"
+                ],
+                "allowCredentials": false
+              },
+              "integration": "AWS_PROXY"
+            }
+          }
+        ],
+        "name": "kuiski-api-v1-auth",
+        "package": {},
+        "vpc": {}
+      },
+      "list-image": {
+        "handler": "src/images.list",
+        "events": [
+          {
+            "http": {
+              "path": "images/list",
+              "method": "get",
+              "cors": {
+                "origins": [
+                  "*"
+                ],
+                "origin": "*",
+                "methods": [
+                  "OPTIONS",
+                  "GET"
+                ],
+                "headers": [
+                  "Content-Type",
+                  "X-Amz-Date",
+                  "Authorization",
+                  "X-Api-Key",
+                  "X-Amz-Security-Token",
+                  "X-Amz-User-Agent"
+                ],
+                "allowCredentials": false
+              },
+              "integration": "AWS_PROXY"
+            }
+          }
+        ],
+        "name": "kuiski-api-v1-list-image",
+        "package": {},
+        "vpc": {}
+      }
+    },
+    "resources": {
+      "Resources": {
+        "kuiskiTable": {
+          "Type": "AWS::DynamoDB::Table",
+          "DeletionPolicy": "Retain",
+          "Properties": {
+            "AttributeDefinitions": [
+              {
+                "AttributeName": "group",
+                "AttributeType": "S"
+              },
+              {
+                "AttributeName": "key",
+                "AttributeType": "S"
+              }
+            ],
+            "KeySchema": [
+              {
+                "AttributeName": "group",
+                "KeyType": "HASH"
+              },
+              {
+                "AttributeName": "key",
+                "KeyType": "RANGE"
+              }
+            ],
+            "ProvisionedThroughput": {
+              "ReadCapacityUnits": 5,
+              "WriteCapacityUnits": 5
+            },
+            "TableName": "kuiski"
+          }
+        }
+      },
+      "Outputs": {}
+    },
+    "artifact": "/Users/yt/project/kuiski/kuiski-api/.serverless/kuiski-api.zip"
+  },
+  "package": {
+    "artifactDirectoryName": "serverless/kuiski-api/v1/1518913012821-2018-02-18T00:16:52.821Z",
+    "artifact": "kuiski-api.zip"
+  }
+}

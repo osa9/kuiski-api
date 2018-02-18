@@ -1,0 +1,19 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "run list users",
+            "program": "${workspaceRoot}/node_modules/.bin/sls",
+            "args": [
+                "invoke",
+                "local",
+                "-f",
+                "users",
+                "--data",
+                "{}"
+            ]
+        }
+    ]
+}

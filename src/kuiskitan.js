@@ -168,7 +168,7 @@ const uploadMedia = (filename, filetype) => {
       api_secret: process.env.CLOUDINARY_API_SECRET
     });
 
-    cloudinary.uploader.upload(filename, res => {
+    cloudinary.v2.uploader.upload(filename, { folder: "dev" }, res => {
       console.log(res);
 
       if (filetype == "image") {

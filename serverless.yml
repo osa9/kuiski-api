@@ -24,6 +24,7 @@ provider:
     CLOUDINARY_CLOUD_NAME: ${ssm:cloudinaryCloudName}
     CLOUDINARY_API_KEY: ${ssm:cloudinaryApiKey}
     CLOUDINARY_API_SECRET: ${ssm:cloudinaryApiSecret}
+    GOOGLE_MAP_KEY: ${ssm:googleMapKey}
 
 plugins:
   - serverless-domain-manager
@@ -104,6 +105,20 @@ functions:
       - http:
           path: kuiskitan/webhook
           method: post
+          cors: true
+  auth:
+    handler: src/auth.handler
+    events:
+      - http:
+          path: auth
+          method: get
+          cors: true
+  list-image:
+    handler: src/images.list
+    events:
+      - http:
+          path: images/list
+          method: get
           cors: true
 resources:
   Resources:
