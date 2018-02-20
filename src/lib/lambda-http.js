@@ -40,10 +40,15 @@ class InternalServerError extends HttpError {
 }
 
 class ApiRequestHandler {
-  constructor(params, event, context) {
+  constructor(params, event, context, api) {
     this.params = params;
     this.event = event;
     this.context = context;
+    this.api = api;
+  }
+
+  setHeader(key, value) {
+    this.api.setHeader(key, value);
   }
 
   /*getParameter(name, default_value = null, target = ['pathParameters', 'queryStringParameters']) {
@@ -82,9 +87,13 @@ class LambdaApi {
   }
 
   _response(statusCode, body) {
+    const resbody =
+      this.headers["Content-Type"] === "application/json"
+        ? JSON.stringify(body)
+        : body;
     return {
       statusCode: statusCode.toString(),
-      body: JSON.stringify(body),
+      body: resbody,
       headers: this.headers
     };
   }
@@ -112,6 +121,8 @@ class LambdaApi {
         return get(this.event, "pathParameters", {});
       case "query":
         return get(this.event, "queryStringParameters", {});
+      case "query_lambda":
+        return get(this.event, "query", {});
       case "body":
         var res = {};
         res[name] = this.event.body;
@@ -191,7 +202,7 @@ class LambdaApi {
     new Promise(resolve => {
       const params = this.params ? this.getParameters(this.params) : undefined;
       const res = handler(
-        new ApiRequestHandler(params, this.event, this.context)
+        new ApiRequestHandler(params, this.event, this.context, this)
       );
       resolve(res);
     })

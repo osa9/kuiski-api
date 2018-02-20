@@ -65,6 +65,12 @@
         "LogGroupName": "/aws/lambda/kuiski-api-v1-list-image"
       }
     },
+    "GetDashspeechDashurlLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/kuiski-api-v1-get-speech-url"
+      }
+    },
     "IamRoleLambdaExecution": {
       "Type": "AWS::IAM::Role",
       "Properties": {
@@ -134,6 +140,9 @@
                     },
                     {
                       "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/kuiski-api-v1-list-image:*"
+                    },
+                    {
+                      "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/kuiski-api-v1-get-speech-url:*"
                     }
                   ]
                 },
@@ -172,6 +181,9 @@
                     },
                     {
                       "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/kuiski-api-v1-list-image:*:*"
+                    },
+                    {
+                      "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/kuiski-api-v1-get-speech-url:*:*"
                     }
                   ]
                 },
@@ -187,6 +199,15 @@
                     "dynamodb:DeleteItem"
                   ],
                   "Resource": "arn:aws:dynamodb:us-east-1:*:table/kuiski"
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "s3:PutObject",
+                    "s3:PutObjectAcl",
+                    "s3:ListObjects"
+                  ],
+                  "Resource": "*"
                 }
               ]
             }
@@ -213,7 +234,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/kuiski-api/v1/1518913012821-2018-02-18T00:16:52.821Z/kuiski-api.zip"
+          "S3Key": "serverless/kuiski-api/v1/1519132154446-2018-02-20T13:09:14.446Z/kuiski-api.zip"
         },
         "FunctionName": "kuiski-api-v1-notify",
         "Handler": "src/notify.handler",
@@ -245,14 +266,14 @@
         "IamRoleLambdaExecution"
       ]
     },
-    "NotifyLambdaVersionJECfQailQOwXZvIErIXZ2uoojAcZP3XL2aGWa1xqQ": {
+    "NotifyLambdaVersionHhWuBTh6xGTRdvYsbFqE0igJE2IOhdfuhHNMLSgk4": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "NotifyLambdaFunction"
         },
-        "CodeSha256": "fGmEM3V3mykzkIwhy3YukcSEwqvlKRdWhosPRA5Grsw="
+        "CodeSha256": "haocLa9h+YyO9QZ+9QHf3019KEVU+OmEFnBLj+U94gY="
       }
     },
     "AddDashuserLambdaFunction": {
@@ -262,7 +283,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/kuiski-api/v1/1518913012821-2018-02-18T00:16:52.821Z/kuiski-api.zip"
+          "S3Key": "serverless/kuiski-api/v1/1519132154446-2018-02-20T13:09:14.446Z/kuiski-api.zip"
         },
         "FunctionName": "kuiski-api-v1-add-user",
         "Handler": "src/users.addUser",
@@ -294,14 +315,14 @@
         "IamRoleLambdaExecution"
       ]
     },
-    "AddDashuserLambdaVersionROF16JQojw5Pbz5VuOF8CbLXyhTIvTCLO0jkekJ8": {
+    "AddDashuserLambdaVersionBdSedTI3BCVroH61Q29hFRv1Xyzc4Vx3jk0V2nph48": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "AddDashuserLambdaFunction"
         },
-        "CodeSha256": "fGmEM3V3mykzkIwhy3YukcSEwqvlKRdWhosPRA5Grsw="
+        "CodeSha256": "haocLa9h+YyO9QZ+9QHf3019KEVU+OmEFnBLj+U94gY="
       }
     },
     "ListDashusersLambdaFunction": {
@@ -311,7 +332,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/kuiski-api/v1/1518913012821-2018-02-18T00:16:52.821Z/kuiski-api.zip"
+          "S3Key": "serverless/kuiski-api/v1/1519132154446-2018-02-20T13:09:14.446Z/kuiski-api.zip"
         },
         "FunctionName": "kuiski-api-v1-list-users",
         "Handler": "src/users.listUsers",
@@ -343,14 +364,14 @@
         "IamRoleLambdaExecution"
       ]
     },
-    "ListDashusersLambdaVersion4mwtcZCtpKqTzJIgPhXJ1Gi2fNu3T2WDbTsMpcNx4": {
+    "ListDashusersLambdaVersionZgaWpGP6WdmqCASFl0HOWeSDDY0xyrYyrljUb9AJc": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "ListDashusersLambdaFunction"
         },
-        "CodeSha256": "fGmEM3V3mykzkIwhy3YukcSEwqvlKRdWhosPRA5Grsw="
+        "CodeSha256": "haocLa9h+YyO9QZ+9QHf3019KEVU+OmEFnBLj+U94gY="
       }
     },
     "UpdateDashuserDashdebtLambdaFunction": {
@@ -360,7 +381,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/kuiski-api/v1/1518913012821-2018-02-18T00:16:52.821Z/kuiski-api.zip"
+          "S3Key": "serverless/kuiski-api/v1/1519132154446-2018-02-20T13:09:14.446Z/kuiski-api.zip"
         },
         "FunctionName": "kuiski-api-v1-update-user-debt",
         "Handler": "src/users.updateDebt",
@@ -392,14 +413,14 @@
         "IamRoleLambdaExecution"
       ]
     },
-    "UpdateDashuserDashdebtLambdaVersionPYFKhup94dE0MYAseAOOLtDUplsExd9Mib5WfaJy5s": {
+    "UpdateDashuserDashdebtLambdaVersionpn8QjziJy3sgAC7Y9Qz2m9RJGaLg4zATHVNSSeuMT68": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "UpdateDashuserDashdebtLambdaFunction"
         },
-        "CodeSha256": "fGmEM3V3mykzkIwhy3YukcSEwqvlKRdWhosPRA5Grsw="
+        "CodeSha256": "haocLa9h+YyO9QZ+9QHf3019KEVU+OmEFnBLj+U94gY="
       }
     },
     "KuistanDashtextLambdaFunction": {
@@ -409,7 +430,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/kuiski-api/v1/1518913012821-2018-02-18T00:16:52.821Z/kuiski-api.zip"
+          "S3Key": "serverless/kuiski-api/v1/1519132154446-2018-02-20T13:09:14.446Z/kuiski-api.zip"
         },
         "FunctionName": "kuiski-api-v1-kuistan-text",
         "Handler": "src/kuiskitan.text",
@@ -441,14 +462,14 @@
         "IamRoleLambdaExecution"
       ]
     },
-    "KuistanDashtextLambdaVersionxkUnUyNNrfu81DiR49O6Ok0W1KjAtRxHrVZKFUfI4": {
+    "KuistanDashtextLambdaVersionpnrMErtipCOxIlcLZAhd8SqHH35dSzsVNlyR9dY9PA": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "KuistanDashtextLambdaFunction"
         },
-        "CodeSha256": "fGmEM3V3mykzkIwhy3YukcSEwqvlKRdWhosPRA5Grsw="
+        "CodeSha256": "haocLa9h+YyO9QZ+9QHf3019KEVU+OmEFnBLj+U94gY="
       }
     },
     "KuistanDashdialogLambdaFunction": {
@@ -458,7 +479,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/kuiski-api/v1/1518913012821-2018-02-18T00:16:52.821Z/kuiski-api.zip"
+          "S3Key": "serverless/kuiski-api/v1/1519132154446-2018-02-20T13:09:14.446Z/kuiski-api.zip"
         },
         "FunctionName": "kuiski-api-v1-kuistan-dialog",
         "Handler": "src/kuiskitan.dialog",
@@ -490,14 +511,14 @@
         "IamRoleLambdaExecution"
       ]
     },
-    "KuistanDashdialogLambdaVersion4sjpd1IFkvNYIdJLOMTWjlP65ZDtPhdK4aZIPG3jM": {
+    "KuistanDashdialogLambdaVersionbVQWyEN4bK8G15TshJPssjeuQYVgqjUzaT4wFJWU": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "KuistanDashdialogLambdaFunction"
         },
-        "CodeSha256": "fGmEM3V3mykzkIwhy3YukcSEwqvlKRdWhosPRA5Grsw="
+        "CodeSha256": "haocLa9h+YyO9QZ+9QHf3019KEVU+OmEFnBLj+U94gY="
       }
     },
     "KuistanDashimageLambdaFunction": {
@@ -507,7 +528,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/kuiski-api/v1/1518913012821-2018-02-18T00:16:52.821Z/kuiski-api.zip"
+          "S3Key": "serverless/kuiski-api/v1/1519132154446-2018-02-20T13:09:14.446Z/kuiski-api.zip"
         },
         "FunctionName": "kuiski-api-v1-kuistan-image",
         "Handler": "src/kuiskitan.image",
@@ -539,14 +560,14 @@
         "IamRoleLambdaExecution"
       ]
     },
-    "KuistanDashimageLambdaVersionI5qGWrH1V3jUoaZXChxvSrCurQzj7CLW6sDagEi7Y": {
+    "KuistanDashimageLambdaVersionPklzufOwxk6tXgdWbpC0K3D094S7VnXjh9M6Bgm98MU": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "KuistanDashimageLambdaFunction"
         },
-        "CodeSha256": "fGmEM3V3mykzkIwhy3YukcSEwqvlKRdWhosPRA5Grsw="
+        "CodeSha256": "haocLa9h+YyO9QZ+9QHf3019KEVU+OmEFnBLj+U94gY="
       }
     },
     "KuistanDashwebhookLambdaFunction": {
@@ -556,7 +577,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/kuiski-api/v1/1518913012821-2018-02-18T00:16:52.821Z/kuiski-api.zip"
+          "S3Key": "serverless/kuiski-api/v1/1519132154446-2018-02-20T13:09:14.446Z/kuiski-api.zip"
         },
         "FunctionName": "kuiski-api-v1-kuistan-webhook",
         "Handler": "src/kuiskitan.webhook",
@@ -588,14 +609,14 @@
         "IamRoleLambdaExecution"
       ]
     },
-    "KuistanDashwebhookLambdaVersionyh6Qgxrf2ZX4hvWmPtOD1xB1zJCDeLgYgOAlX5iH6s": {
+    "KuistanDashwebhookLambdaVersionHnUK7JTQsnRwO3QKAoIrHwMi1D8pv8A0sFfddLn1zAQ": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "KuistanDashwebhookLambdaFunction"
         },
-        "CodeSha256": "fGmEM3V3mykzkIwhy3YukcSEwqvlKRdWhosPRA5Grsw="
+        "CodeSha256": "haocLa9h+YyO9QZ+9QHf3019KEVU+OmEFnBLj+U94gY="
       }
     },
     "AuthLambdaFunction": {
@@ -605,7 +626,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/kuiski-api/v1/1518913012821-2018-02-18T00:16:52.821Z/kuiski-api.zip"
+          "S3Key": "serverless/kuiski-api/v1/1519132154446-2018-02-20T13:09:14.446Z/kuiski-api.zip"
         },
         "FunctionName": "kuiski-api-v1-auth",
         "Handler": "src/auth.handler",
@@ -637,14 +658,14 @@
         "IamRoleLambdaExecution"
       ]
     },
-    "AuthLambdaVersionPu4rAKjMMmRMXLZW3HVzfIyWFv6T81PHQHlTmCiRg": {
+    "AuthLambdaVersionppVwInGWExryZ2OMOkhapj2dlp3NGJzNpMOkqVFiTY": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "AuthLambdaFunction"
         },
-        "CodeSha256": "fGmEM3V3mykzkIwhy3YukcSEwqvlKRdWhosPRA5Grsw="
+        "CodeSha256": "haocLa9h+YyO9QZ+9QHf3019KEVU+OmEFnBLj+U94gY="
       }
     },
     "ListDashimageLambdaFunction": {
@@ -654,7 +675,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/kuiski-api/v1/1518913012821-2018-02-18T00:16:52.821Z/kuiski-api.zip"
+          "S3Key": "serverless/kuiski-api/v1/1519132154446-2018-02-20T13:09:14.446Z/kuiski-api.zip"
         },
         "FunctionName": "kuiski-api-v1-list-image",
         "Handler": "src/images.list",
@@ -686,14 +707,63 @@
         "IamRoleLambdaExecution"
       ]
     },
-    "ListDashimageLambdaVersion5zSytaGZrAZ6Q3OnoDjpGPejp5sNBPI1zyG6voBLY": {
+    "ListDashimageLambdaVersionXF2PZLCmY9LDoUjsT4WlEG7jJt8d9RfMF6nGQp1J4": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "ListDashimageLambdaFunction"
         },
-        "CodeSha256": "fGmEM3V3mykzkIwhy3YukcSEwqvlKRdWhosPRA5Grsw="
+        "CodeSha256": "haocLa9h+YyO9QZ+9QHf3019KEVU+OmEFnBLj+U94gY="
+      }
+    },
+    "GetDashspeechDashurlLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/kuiski-api/v1/1519132154446-2018-02-20T13:09:14.446Z/kuiski-api.zip"
+        },
+        "FunctionName": "kuiski-api-v1-get-speech-url",
+        "Handler": "src/sounds.getSpeechUrl",
+        "MemorySize": 1024,
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        },
+        "Runtime": "nodejs6.10",
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "DYNAMODB_TABLE": "kuiski",
+            "PUBNUB_PUBLISH_KEY": "pub-c-ce0c67c2-ebed-4b63-a04d-bae8f872e669",
+            "PUBNUB_SUBSCRIBE_KEY": "sub-c-8f1bb4c4-0cc2-11e8-afa0-d615f40beee2",
+            "KUISKITAN_ACCESS_TOKEN": "VV47ruVNSSYbIThZFOYIEJrKRQtCbmdkaob6HXJmuSafi1asFM+H4uyLjF794jBPvTXOwIHx5teRenbGqDHwMYAuD7JGTguHPhCp/JOvxmCJN59Jfvg5sslfen+moNfhmObrHznq8HRhpFi2AmgfZwdB04t89/1O/w1cDnyilFU=",
+            "KUISKITAN_CHANNEL_SECRET": "0913b18d40a0d56766f8d96ff117b8e8",
+            "CLOUDINARY_CLOUD_NAME": "dke5tzfyy",
+            "CLOUDINARY_API_KEY": "382374726353465",
+            "CLOUDINARY_API_SECRET": "q-mDFpDJK42HSJpPrfPxWwEwp_M",
+            "GOOGLE_MAP_KEY": "AIzaSyBuRCLdclMyL_JdEHONdZxB8-I5u2d1vpA"
+          }
+        }
+      },
+      "DependsOn": [
+        "GetDashspeechDashurlLogGroup",
+        "IamRoleLambdaExecution"
+      ]
+    },
+    "GetDashspeechDashurlLambdaVersiono5a90BIYdiPmtenHyxAhqEQNPVrmMjD71ffcOMBxXNs": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "GetDashspeechDashurlLambdaFunction"
+        },
+        "CodeSha256": "haocLa9h+YyO9QZ+9QHf3019KEVU+OmEFnBLj+U94gY="
       }
     },
     "ApiGatewayRestApi": {
@@ -885,6 +955,21 @@
           "Ref": "ApiGatewayResourceImages"
         },
         "PathPart": "list",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayResourceSpeech": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "ApiGatewayRestApi",
+            "RootResourceId"
+          ]
+        },
+        "PathPart": "speech",
         "RestApiId": {
           "Ref": "ApiGatewayRestApi"
         }
@@ -1304,6 +1389,52 @@
         }
       }
     },
+    "ApiGatewayMethodSpeechOptions": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "OPTIONS",
+        "MethodResponses": [
+          {
+            "StatusCode": "200",
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Origin": true,
+              "method.response.header.Access-Control-Allow-Headers": true,
+              "method.response.header.Access-Control-Allow-Methods": true,
+              "method.response.header.Access-Control-Allow-Credentials": true
+            },
+            "ResponseModels": {}
+          }
+        ],
+        "RequestParameters": {},
+        "Integration": {
+          "Type": "MOCK",
+          "RequestTemplates": {
+            "application/json": "{statusCode:200}"
+          },
+          "IntegrationResponses": [
+            {
+              "StatusCode": "200",
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'",
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET'",
+                "method.response.header.Access-Control-Allow-Credentials": "'false'"
+              },
+              "ResponseTemplates": {
+                "application/json": ""
+              }
+            }
+          ]
+        },
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceSpeech"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
     "ApiGatewayMethodNotifyGet": {
       "Type": "AWS::ApiGateway::Method",
       "Properties": {
@@ -1701,7 +1832,46 @@
         "MethodResponses": []
       }
     },
-    "ApiGatewayDeployment1518913013972": {
+    "ApiGatewayMethodSpeechGet": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "GET",
+        "RequestParameters": {},
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceSpeech"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "ApiKeyRequired": false,
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "GetDashspeechDashurlLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        },
+        "MethodResponses": []
+      }
+    },
+    "ApiGatewayDeployment1519132155160": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -1719,7 +1889,9 @@
         "ApiGatewayMethodKuiskitanImagePost",
         "ApiGatewayMethodKuiskitanWebhookPost",
         "ApiGatewayMethodAuthGet",
-        "ApiGatewayMethodImagesListGet"
+        "ApiGatewayMethodImagesListGet",
+        "ApiGatewayMethodSpeechGet",
+        "CustomApiGatewayBinarySupportResource"
       ]
     },
     "NotifyLambdaPermissionApiGateway": {
@@ -2052,10 +2224,43 @@
         }
       }
     },
+    "GetDashspeechDashurlLambdaPermissionApiGateway": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "GetDashspeechDashurlLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:aws:execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "/*/*"
+            ]
+          ]
+        }
+      }
+    },
     "pathmapping": {
       "Type": "AWS::ApiGateway::BasePathMapping",
       "DependsOn": [
-        "ApiGatewayDeployment1518913013972"
+        "ApiGatewayDeployment1519132155160"
       ],
       "Properties": {
         "BasePath": "(none)",
@@ -2065,6 +2270,184 @@
         },
         "Stage": "v1"
       }
+    },
+    "CustomApiGatewayBinarySupportRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "Path": "/",
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": "apigateway-permissions",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "apigateway:*"
+                  ],
+                  "Resource": "arn:aws:apigateway:*:*:*"
+                }
+              ]
+            }
+          },
+          {
+            "PolicyName": "logs-permissions",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "logs:*"
+                  ],
+                  "Resource": "arn:aws:logs:*:*:*"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "CustomApiGatewayBinarySupportFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Runtime": "nodejs6.10",
+        "Timeout": 60,
+        "Handler": "index.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "CustomApiGatewayBinarySupportRole",
+            "Arn"
+          ]
+        },
+        "Code": {
+          "ZipFile": {
+            "Fn::Join": [
+              " ",
+              [
+                "'use strict';",
+                "const aws = require('aws-sdk');",
+                "const response = require('cfn-response');",
+                "module.exports.handler = function(event, context) {",
+                "  Promise.resolve()",
+                "    .then(() => {",
+                "      const apigateway = new aws.APIGateway();",
+                "      const integrationResponses = event.ResourceProperties.IntegrationResponses;",
+                "      const binaryMediaTypes = event.ResourceProperties.BinaryMediaTypes;",
+                "      const restApiId = event.ResourceProperties.RestApi;",
+                "      const apiName = event.ResourceProperties.ApiName;",
+                "      const swaggerInput = JSON.stringify({",
+                "        \"swagger\": \"2.0\",",
+                "        \"info\": {",
+                "          \"title\": apiName",
+                "        },",
+                "        \"x-amazon-apigateway-binary-media-types\": binaryMediaTypes",
+                "      });",
+                "      const integrationResponse = {",
+                "        statusCode: '200',",
+                "        restApiId: restApiId",
+                "      };",
+                "      switch (event.RequestType) {",
+                "        case 'Create':",
+                "        case 'Update':",
+                "          return apigateway.putRestApi({",
+                "            restApiId: restApiId,",
+                "            mode: 'merge',",
+                "            body: swaggerInput",
+                "          })",
+                "          .promise()",
+                "          .then(() => {",
+                "            return apigateway.getResources({ restApiId: restApiId })",
+                "              .promise();",
+                "          })",
+                "          .then((resources) => {",
+                "            const integrationPromises = [];",
+                "            integrationResponses.forEach((response) => {",
+                "              integrationResponse.httpMethod = response.httpMethod;",
+                "              integrationResponse.contentHandling = response.contentHandling;",
+                "              integrationResponse.resourceId = resources.items.find(r => r.path === `/${response.path}`).id;",
+                "              integrationPromises.push(apigateway.putIntegrationResponse(integrationResponse).promise());",
+                "            });",
+                "            return Promise.all(integrationPromises);",
+                "          })",
+                "          .then(() => 'BinaryMediaTypes and ContentHandling set in api gateway.');",
+                "        default:",
+                "          return Promise.resolve('no action matched');",
+                "      }",
+                "    })",
+                "    .then((msg) => {",
+                "      /* eslint-disable no-console */",
+                "      console.log('completed: ', msg);",
+                "      response.send(event, context, response.SUCCESS, {});",
+                "    })",
+                "    .catch(e => {",
+                "      /* eslint-disable no-console */",
+                "      console.log(e);",
+                "      response.send(event, context, response.FAILED, {});",
+                "    });",
+                "};",
+                ""
+              ]
+            ]
+          }
+        }
+      },
+      "DependsOn": [
+        "CustomApiGatewayBinarySupportRole"
+      ]
+    },
+    "CustomApiGatewayBinarySupportLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/lambda/",
+              {
+                "Ref": "CustomApiGatewayBinarySupportFunction"
+              }
+            ]
+          ]
+        }
+      }
+    },
+    "CustomApiGatewayBinarySupportResource": {
+      "Type": "Custom::ApiGatewayBinarySupport",
+      "Properties": {
+        "IntegrationResponses": [],
+        "BinaryMediaTypes": [
+          "audio/mp3",
+          "audio/mpeg"
+        ],
+        "ApiName": "v1-kuiski-api",
+        "RestApi": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "CustomApiGatewayBinarySupportFunction",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "ApiGatewayRestApi",
+        "CustomApiGatewayBinarySupportFunction"
+      ]
     },
     "kuiskiTable": {
       "Type": "AWS::DynamoDB::Table",
@@ -2107,61 +2490,67 @@
     "NotifyLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "NotifyLambdaVersionJECfQailQOwXZvIErIXZ2uoojAcZP3XL2aGWa1xqQ"
+        "Ref": "NotifyLambdaVersionHhWuBTh6xGTRdvYsbFqE0igJE2IOhdfuhHNMLSgk4"
       }
     },
     "AddDashuserLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "AddDashuserLambdaVersionROF16JQojw5Pbz5VuOF8CbLXyhTIvTCLO0jkekJ8"
+        "Ref": "AddDashuserLambdaVersionBdSedTI3BCVroH61Q29hFRv1Xyzc4Vx3jk0V2nph48"
       }
     },
     "ListDashusersLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "ListDashusersLambdaVersion4mwtcZCtpKqTzJIgPhXJ1Gi2fNu3T2WDbTsMpcNx4"
+        "Ref": "ListDashusersLambdaVersionZgaWpGP6WdmqCASFl0HOWeSDDY0xyrYyrljUb9AJc"
       }
     },
     "UpdateDashuserDashdebtLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "UpdateDashuserDashdebtLambdaVersionPYFKhup94dE0MYAseAOOLtDUplsExd9Mib5WfaJy5s"
+        "Ref": "UpdateDashuserDashdebtLambdaVersionpn8QjziJy3sgAC7Y9Qz2m9RJGaLg4zATHVNSSeuMT68"
       }
     },
     "KuistanDashtextLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "KuistanDashtextLambdaVersionxkUnUyNNrfu81DiR49O6Ok0W1KjAtRxHrVZKFUfI4"
+        "Ref": "KuistanDashtextLambdaVersionpnrMErtipCOxIlcLZAhd8SqHH35dSzsVNlyR9dY9PA"
       }
     },
     "KuistanDashdialogLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "KuistanDashdialogLambdaVersion4sjpd1IFkvNYIdJLOMTWjlP65ZDtPhdK4aZIPG3jM"
+        "Ref": "KuistanDashdialogLambdaVersionbVQWyEN4bK8G15TshJPssjeuQYVgqjUzaT4wFJWU"
       }
     },
     "KuistanDashimageLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "KuistanDashimageLambdaVersionI5qGWrH1V3jUoaZXChxvSrCurQzj7CLW6sDagEi7Y"
+        "Ref": "KuistanDashimageLambdaVersionPklzufOwxk6tXgdWbpC0K3D094S7VnXjh9M6Bgm98MU"
       }
     },
     "KuistanDashwebhookLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "KuistanDashwebhookLambdaVersionyh6Qgxrf2ZX4hvWmPtOD1xB1zJCDeLgYgOAlX5iH6s"
+        "Ref": "KuistanDashwebhookLambdaVersionHnUK7JTQsnRwO3QKAoIrHwMi1D8pv8A0sFfddLn1zAQ"
       }
     },
     "AuthLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "AuthLambdaVersionPu4rAKjMMmRMXLZW3HVzfIyWFv6T81PHQHlTmCiRg"
+        "Ref": "AuthLambdaVersionppVwInGWExryZ2OMOkhapj2dlp3NGJzNpMOkqVFiTY"
       }
     },
     "ListDashimageLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "ListDashimageLambdaVersion5zSytaGZrAZ6Q3OnoDjpGPejp5sNBPI1zyG6voBLY"
+        "Ref": "ListDashimageLambdaVersionXF2PZLCmY9LDoUjsT4WlEG7jJt8d9RfMF6nGQp1J4"
+      }
+    },
+    "GetDashspeechDashurlLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "GetDashspeechDashurlLambdaVersiono5a90BIYdiPmtenHyxAhqEQNPVrmMjD71ffcOMBxXNs"
       }
     },
     "ServiceEndpoint": {

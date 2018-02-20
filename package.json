@@ -5,13 +5,16 @@
   "dependencies": {
     "@line/bot-sdk": "^5.2.0",
     "cloudinary": "^1.10.0",
+    "google-tts-api": "^0.0.2",
+    "isomorphic-fetch": "^2.2.1",
     "node-fetch": "^1.7.3",
     "shortid": "^2.2.8"
   },
   "devDependencies": {
     "jest": "^22.3.0",
     "serverless": "^1.26.0",
-    "serverless-domain-manager": "^2.3.0"
+    "serverless-domain-manager": "^2.3.0",
+    "serverless-plugin-custom-binary": "^1.1.0"
   },
   "scripts": {
     "test": "jest"
